@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "D3F86A35F096BBEDD112D96288A6DD4B93E0946B",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "D3F86A35F096BBEDD112D96288A6DD4B93E0946B" : 9223372036854775807,
+    "B775552D1BBEEADC6A0BBB2FD048B6AA26CB309D" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "5AF2CEDA-8FA6-46E9-A8C1-F0768D36ABBD",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "D3F86A35F096BBEDD112D96288A6DD4B93E0946B" : "ChatApplicationDemo\/",
+    "B775552D1BBEEADC6A0BBB2FD048B6AA26CB309D" : "ChatApplicationDemo\/ChatApplicationDemo\/Classes\/Utility\/ThirdPartyLib\/XMPPFramework\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "ChatApplicationDemo",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "ChatApplicationDemo.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/robbiehanson\/XMPPFramework.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "B775552D1BBEEADC6A0BBB2FD048B6AA26CB309D"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/mohini14\/ChatApplicationDemo.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "D3F86A35F096BBEDD112D96288A6DD4B93E0946B"
+    }
+  ]
+}

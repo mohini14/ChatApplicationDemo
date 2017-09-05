@@ -46,6 +46,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1502A7E21F5E9EB800CD4BD7 /* Define.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Define.h; sourceTree = "<group>"; };
 		155556091F57E5520088CC7B /* ChatApplicationDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChatApplicationDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1555561D1F57E5520088CC7B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		155556251F57E5F80088CC7B /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -84,7 +85,6 @@
 		15A31BAE1F5D321900A190B7 /* XMPPRoomHybrid.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = XMPPRoomHybrid.xcdatamodel; sourceTree = "<group>"; };
 		15A31BB31F5D321A00A190B7 /* XMPPvCard.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = XMPPvCard.xcdatamodel; sourceTree = "<group>"; };
 		15A31BC31F5D321A00A190B7 /* XMPPMessageArchiving.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = XMPPMessageArchiving.xcdatamodel; sourceTree = "<group>"; };
-		15A31C1F1F5D321A00A190B7 /* Define.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Define.h; sourceTree = "<group>"; };
 		15A31C271F5D325F00A190B7 /* NSDictionary+ChatApplicationDemo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+ChatApplicationDemo.h"; sourceTree = "<group>"; };
 		15A31C281F5D325F00A190B7 /* NSDictionary+ChatApplicationDemo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+ChatApplicationDemo.m"; sourceTree = "<group>"; };
 		15A31C2A1F5D465B00A190B7 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
@@ -1398,7 +1398,7 @@
 		15A31C1E1F5D321A00A190B7 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				15A31C1F1F5D321A00A190B7 /* Define.h */,
+				1502A7E21F5E9EB800CD4BD7 /* Define.h */,
 				15A31C371F5D5E4E00A190B7 /* Utility.h */,
 				15A31C381F5D5E4E00A190B7 /* Utility.m */,
 			);
