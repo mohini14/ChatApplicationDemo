@@ -8,7 +8,6 @@
 
 #import "FrndListViewController.h"
 #import "LoginViewController.h"
-#import "Define.h"
 
 @interface FrndListViewController ()
 {

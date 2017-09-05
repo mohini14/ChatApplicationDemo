@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1502A7E41F5EA4D400CD4BD7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1502A7E31F5EA4D400CD4BD7 /* Localizable.strings */; };
+		1502A7E81F5EB27A00CD4BD7 /* ChatManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1502A7E71F5EB27A00CD4BD7 /* ChatManager.m */; };
 		155556341F57E5F80088CC7B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 155556261F57E5F80088CC7B /* AppDelegate.m */; };
 		155556361F57E5F80088CC7B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1555562E1F57E5F80088CC7B /* Assets.xcassets */; };
 		155556371F57E5F80088CC7B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 155556301F57E5F80088CC7B /* LaunchScreen.storyboard */; };
@@ -47,6 +49,9 @@
 
 /* Begin PBXFileReference section */
 		1502A7E21F5E9EB800CD4BD7 /* Define.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Define.h; sourceTree = "<group>"; };
+		1502A7E31F5EA4D400CD4BD7 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		1502A7E61F5EB27A00CD4BD7 /* ChatManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatManager.h; sourceTree = "<group>"; };
+		1502A7E71F5EB27A00CD4BD7 /* ChatManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatManager.m; sourceTree = "<group>"; };
 		155556091F57E5520088CC7B /* ChatApplicationDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChatApplicationDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1555561D1F57E5520088CC7B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		155556251F57E5F80088CC7B /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -126,6 +131,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1502A7E51F5EB25500CD4BD7 /* XMPPFiles */ = {
+			isa = PBXGroup;
+			children = (
+				1502A7E61F5EB27A00CD4BD7 /* ChatManager.h */,
+				1502A7E71F5EB27A00CD4BD7 /* ChatManager.m */,
+			);
+			path = XMPPFiles;
+			sourceTree = "<group>";
+		};
 		155556001F57E5520088CC7B = {
 			isa = PBXGroup;
 			children = (
@@ -157,6 +171,7 @@
 		155556231F57E5F80088CC7B /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				1502A7E51F5EB25500CD4BD7 /* XMPPFiles */,
 				15A31B8B1F5D321900A190B7 /* Utility */,
 				15A31B821F5D307A00A190B7 /* DataManager */,
 				15A31B741F5D236200A190B7 /* TableViewCells */,
@@ -204,6 +219,7 @@
 			children = (
 				1555562E1F57E5F80088CC7B /* Assets.xcassets */,
 				155560881F57F6A80088CC7B /* ChatApplicationDemo-Prefix.pch */,
+				1502A7E31F5EA4D400CD4BD7 /* Localizable.strings */,
 			);
 			path = Others;
 			sourceTree = "<group>";
@@ -1500,6 +1516,7 @@
 				155556381F57E5F80088CC7B /* Main.storyboard in Resources */,
 				155556361F57E5F80088CC7B /* Assets.xcassets in Resources */,
 				155556371F57E5F80088CC7B /* LaunchScreen.storyboard in Resources */,
+				1502A7E41F5EA4D400CD4BD7 /* Localizable.strings in Resources */,
 				15A31C2E1F5D491200A190B7 /* RecievedMessageCell.xib in Resources */,
 				15A31B811F5D277900A190B7 /* FrndListcell.xib in Resources */,
 				15A31C301F5D492C00A190B7 /* SelfMessageTableCell.xib in Resources */,
@@ -1590,6 +1607,7 @@
 				15A31C2C1F5D465B00A190B7 /* Message.m in Sources */,
 				155556341F57E5F80088CC7B /* AppDelegate.m in Sources */,
 				15A31C291F5D325F00A190B7 /* NSDictionary+ChatApplicationDemo.m in Sources */,
+				1502A7E81F5EB27A00CD4BD7 /* ChatManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1692,6 +1710,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 45C6ZJ7FZY;
+				GCC_PREFIX_HEADER = "/Users/mohini/Desktop/codebase/ChatApplicationDemo/ChatApplicationDemo/Resources/Others/ChatApplicationDemo-Prefix.pch";
 				INFOPLIST_FILE = ChatApplicationDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -1719,6 +1738,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 45C6ZJ7FZY;
+				GCC_PREFIX_HEADER = "/Users/mohini/Desktop/codebase/ChatApplicationDemo/ChatApplicationDemo/Resources/Others/ChatApplicationDemo-Prefix.pch";
 				INFOPLIST_FILE = ChatApplicationDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (

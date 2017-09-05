@@ -1,0 +1,11 @@
+/* 
+  Localizable.strings
+  ChatApplicationDemo
+
+  Created by Mohini Sindhu  on 05/09/17.
+  Copyright © 2017 Mohini Sindhu . All rights reserved.
+*/
+
+//Login VC strings
+"Please fill all the fields" = "Please fill all the fields";
+"AppName" = "Let's Chat";

@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "FrndListTableCell.h"
-#import "Person.h"
-#import "Define.h"
 
 @interface FrndListViewController : UIViewController<UITableViewDelegate, UITableViewDataSource>
 

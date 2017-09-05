@@ -18,9 +18,9 @@
 	
 	if(self)
 	{
-		self.messageDate = [messageData stringForKey:kMessagedatekey];
-		self.messageData = [messageData stringForKey:kMessageDataKey];
-		self.messageType = [messageData stringForKey:kMessageTypeKey];
+		self.messadgeDate = [messageData stringForKey:kMessagedateKey];
+		self.messageData  = [messageData stringForKey:kMessagedataKey];
+		self.messageType  = [messageData stringForKey:kMessageTypeKey];
 	}
 	return self;
 }

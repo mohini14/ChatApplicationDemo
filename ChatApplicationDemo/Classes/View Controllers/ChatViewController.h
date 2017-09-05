@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Message.h"
 
 @interface ChatViewController : UIViewController<UITabBarDelegate, UITableViewDataSource>
 

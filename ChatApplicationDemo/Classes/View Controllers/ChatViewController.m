@@ -9,9 +9,6 @@
 #import "ChatViewController.h"
 #import "SelfMessageTableCell.h"
 #import "RecievedMessageCell.h"
-#import "Person.h"
-#import "Define.h"
-#import "Utility.h"
 
 @interface ChatViewController ()
 {

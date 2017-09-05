@@ -7,9 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface Utility : NSObject
 
 +(NSString* ) getCurrentDateAndTime;
+
++ (void)promptMessageOnScreen:(NSString *)message sender:(UIViewController*)sender;
 
 @end

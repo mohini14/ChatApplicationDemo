@@ -7,9 +7,6 @@
 //
 
 #import "LoginViewController.h"
-#import "Define.h"
-#import "DataSession.h"
-#import "Person.h"
 
 @interface LoginViewController ()
 {
@@ -34,6 +31,7 @@
 #pragma mark- Actions on VC
 -(IBAction) loginButtonPressed:(id)sender
 {
+	// case: fileds are not empty
 	if(_usernameTextField.text.length > kConstIntZero && _passwordTextField.text.length > kConstIntZero)
 	{
 		NSDictionary* personDetailsDict = @{ kUserIdKey :_usernameTextField.text,
@@ -45,6 +43,8 @@
 		
 		[self dismissViewControllerAnimated:YES completion:nil];
 	}
+	else
+		[Utility promptMessageOnScreen:NSLocalizedString(@"Please fill all the fields", nil) sender:self];
 }
 
 @end
