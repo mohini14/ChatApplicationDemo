@@ -1,0 +1,18 @@
+//
+//  ChatApplicationDemo-Prefix.pch
+//  ChatApplicationDemo
+//
+//  Created by Mohini Sindhu  on 31/08/17.
+//  Copyright © 2017 Mohini Sindhu . All rights reserved.
+//
+
+#ifndef ChatApplicationDemo_Prefix_pch
+#define ChatApplicationDemo_Prefix_pch
+
+#import "Define.h"
+#import "Person.h"
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#endif /* ChatApplicationDemo_Prefix_pch */
