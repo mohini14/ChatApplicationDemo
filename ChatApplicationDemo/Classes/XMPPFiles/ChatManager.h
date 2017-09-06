@@ -8,7 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ChatManager : NSObject
+@interface ChatManager : NSObject<XMPPStreamDelegate, ChatDelegate>
+
+@property (nonatomic, assign) id  _chatDelegate;
+@property (nonatomic, assign) id  _messageDelegate;
 
 -(BOOL) connect;
 -(void) disconnect;

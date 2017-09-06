@@ -33,10 +33,6 @@
 		15A31B811F5D277900A190B7 /* FrndListcell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15A31B801F5D277900A190B7 /* FrndListcell.xib */; };
 		15A31B871F5D307A00A190B7 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A31B861F5D307A00A190B7 /* Person.m */; };
 		15A31B8A1F5D30BA00A190B7 /* DataSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A31B891F5D30BA00A190B7 /* DataSession.m */; };
-		15A31C201F5D321A00A190B7 /* XMPPRoom.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 15A31BAA1F5D321900A190B7 /* XMPPRoom.xcdatamodeld */; };
-		15A31C211F5D321A00A190B7 /* XMPPRoomHybrid.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 15A31BAD1F5D321900A190B7 /* XMPPRoomHybrid.xcdatamodeld */; };
-		15A31C221F5D321A00A190B7 /* XMPPvCard.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 15A31BB21F5D321A00A190B7 /* XMPPvCard.xcdatamodeld */; };
-		15A31C231F5D321A00A190B7 /* XMPPMessageArchiving.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 15A31BC21F5D321A00A190B7 /* XMPPMessageArchiving.xcdatamodeld */; };
 		15A31C291F5D325F00A190B7 /* NSDictionary+ChatApplicationDemo.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A31C281F5D325F00A190B7 /* NSDictionary+ChatApplicationDemo.m */; };
 		15A31C2C1F5D465B00A190B7 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A31C2B1F5D465B00A190B7 /* Message.m */; };
 		15A31C2E1F5D491200A190B7 /* RecievedMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15A31C2D1F5D491200A190B7 /* RecievedMessageCell.xib */; };
@@ -79,6 +75,8 @@
 		15556A5D1F5822DE0088CC7B /* FrndListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FrndListViewController.m; sourceTree = "<group>"; };
 		15556A5F1F5822ED0088CC7B /* ChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
 		15556A601F5822ED0088CC7B /* ChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatViewController.m; sourceTree = "<group>"; };
+		1591DCCE1F5F076900237B20 /* ChatDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatDelegate.h; sourceTree = "<group>"; };
+		1591DCCF1F5F085D00237B20 /* MessageDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageDelegate.h; sourceTree = "<group>"; };
 		15A31B751F5D238C00A190B7 /* FrndListTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrndListTableCell.h; sourceTree = "<group>"; };
 		15A31B761F5D238C00A190B7 /* FrndListTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FrndListTableCell.m; sourceTree = "<group>"; };
 		15A31B801F5D277900A190B7 /* FrndListcell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FrndListcell.xib; sourceTree = "<group>"; };
@@ -241,6 +239,15 @@
 			path = SupportingFiles;
 			sourceTree = "<group>";
 		};
+		1591DCCD1F5F075200237B20 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				1591DCCE1F5F076900237B20 /* ChatDelegate.h */,
+				1591DCCF1F5F085D00237B20 /* MessageDelegate.h */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
 		15A31B741F5D236200A190B7 /* TableViewCells */ = {
 			isa = PBXGroup;
 			children = (
@@ -296,6 +303,7 @@
 		15A31B8B1F5D321900A190B7 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				1591DCCD1F5F075200237B20 /* Protocols */,
 				15A31B8C1F5D321900A190B7 /* Category */,
 				15A31B8D1F5D321900A190B7 /* ThirdPartyLib */,
 				15A31C1E1F5D321A00A190B7 /* Utils */,
@@ -1591,15 +1599,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				15556A5E1F5822DE0088CC7B /* FrndListViewController.m in Sources */,
-				15A31C221F5D321A00A190B7 /* XMPPvCard.xcdatamodeld in Sources */,
-				15A31C231F5D321A00A190B7 /* XMPPMessageArchiving.xcdatamodeld in Sources */,
 				15556A5B1F5822C30088CC7B /* LoginViewController.m in Sources */,
 				15A31B871F5D307A00A190B7 /* Person.m in Sources */,
-				15A31C201F5D321A00A190B7 /* XMPPRoom.xcdatamodeld in Sources */,
 				15556A611F5822ED0088CC7B /* ChatViewController.m in Sources */,
 				15A31C361F5D497300A190B7 /* SelfMessageTableCell.m in Sources */,
 				15A31C391F5D5E4E00A190B7 /* Utility.m in Sources */,
-				15A31C211F5D321A00A190B7 /* XMPPRoomHybrid.xcdatamodeld in Sources */,
 				155556391F57E5F80088CC7B /* main.m in Sources */,
 				15A31C331F5D495400A190B7 /* RecievedMessageCell.m in Sources */,
 				15A31B771F5D238C00A190B7 /* FrndListTableCell.m in Sources */,
@@ -1710,7 +1714,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 45C6ZJ7FZY;
-				GCC_PREFIX_HEADER = "/Users/mohini/Desktop/codebase/ChatApplicationDemo/ChatApplicationDemo/Resources/Others/ChatApplicationDemo-Prefix.pch";
+				GCC_PREFIX_HEADER = "/Users/mohini/Desktop/ChatApplicationDemo/ChatApplicationDemo/Resources/Others/ChatApplicationDemo-Prefix.pch";
 				INFOPLIST_FILE = ChatApplicationDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -1738,7 +1742,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 45C6ZJ7FZY;
-				GCC_PREFIX_HEADER = "/Users/mohini/Desktop/codebase/ChatApplicationDemo/ChatApplicationDemo/Resources/Others/ChatApplicationDemo-Prefix.pch";
+				GCC_PREFIX_HEADER = "/Users/mohini/Desktop/ChatApplicationDemo/ChatApplicationDemo/Resources/Others/ChatApplicationDemo-Prefix.pch";
 				INFOPLIST_FILE = ChatApplicationDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (

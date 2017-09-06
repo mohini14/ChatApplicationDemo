@@ -7,10 +7,14 @@
 //
 
 #import "ChatManager.h"
+#import "ChatDelegate.h"
 
 @implementation ChatManager
 {
 	XMPPStream* _xmppStream;
+    __weak NSObject* _chatDelegate;
+    __weak NSObject* _messageDelegate;
+    BOOL _isOpen;
 }
 
 + (ChatManager*) sharedInstance
@@ -81,4 +85,50 @@
 	[_xmppStream disconnect];
 }
 
+-(void)xmppStreamDidConnect:(XMPPStream *)sender
+{
+    _isOpen = YES;
+    NSError* error = nil;
+    
+    if([[NSUserDefaults standardUserDefaults] stringForKey:kUserpasswordKey])
+        [_xmppStream authenticateWithPassword:[[NSUserDefaults standardUserDefaults] stringForKey:kUserpasswordKey] error:&error ];
+}
+
+-(void)xmppStreamDidAuthenticate:(XMPPStream *)sender
+{
+    [self goOnline];
+}
+
+-(void)xmppStream:(XMPPStream *)sender didReceivePresence:(XMPPPresence *)presence
+{
+    NSString* presenceType = [presence type];
+    NSString* userName = [[sender myJID]user];
+    NSString* presenceFromUser = [[presence from] user];
+    
+//    if(![presenceFromUser isEqualToString:userName])
+//    {
+//       if([presenceType isEqualToString:@"available"])
+//       {
+//           [Cha newBuddyOnline:[NSString stringWithFormat:@"%@@%@", presenceFromUser, @"jerry.local"]];
+//        }
+//        else if ([presenceType isEqualToString:@"unavailable"])
+//        {
+//            
+//        }
+//    }
+    
+}
+
+- (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message {
+    
+    NSString *msg = [[message elementForName:@"body"] stringValue];
+    NSString *from = [[message attributeForName:@"from"] stringValue];
+    
+    NSMutableDictionary *m = [[NSMutableDictionary alloc] init];
+    [m setObject:msg forKey:@"msg"];
+    [m setObject:from forKey:@"sender"];
+    
+//    [_messageDelegate newMessageReceived:m];
+    
+}
 @end
