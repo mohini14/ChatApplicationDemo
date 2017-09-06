@@ -15,6 +15,7 @@
 @property (strong,nonatomic) NSString* loginId;
 @property (strong,nonatomic) NSString* password;
 @property (strong, nonatomic) Message* message;
+@property (strong,nonatomic) NSString* status;
 
 -(instancetype) initWithPerson : (NSDictionary* )personDetails;
 

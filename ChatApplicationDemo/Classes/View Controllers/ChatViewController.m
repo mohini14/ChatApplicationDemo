@@ -9,11 +9,15 @@
 #import "ChatViewController.h"
 #import "SelfMessageTableCell.h"
 #import "RecievedMessageCell.h"
+#import "NSString+ChatApplicationDemo.h"
 
 @interface ChatViewController ()
 {
 	 IBOutlet UITableView* _chatTableView;
 	 IBOutlet UITextView* _messageTextview;
+	
+	id<MessageDelegate > _messageDelegate;
+	ChatManager* _chatManager;
 	
 	NSMutableArray<Person* >* _messageListArray;
 }
@@ -26,7 +30,16 @@
 #pragma mark- View life cycle methods
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
+	[super viewDidLoad];
+	_messageListArray = [[NSMutableArray alloc]init];
+	_messageDelegate = self;
+	_chatManager = kChatManagerSingletonObj;
+	
+	_chatTableView.delegate = self;
+	_chatTableView.dataSource = self;
+	
+	[_chatManager setUpStream];
+	
 }
 
 - (void)didReceiveMemoryWarning
@@ -41,7 +54,15 @@
 	
 	if(messageContent.length > kConstIntZero)
 	{
-		// SEND MESSSAGE XMPP
+			NSXMLElement *body = [NSXMLElement elementWithName:@"body"];
+			[body setStringValue:messageContent];
+			
+			NSXMLElement *message = [NSXMLElement elementWithName:kMessageKey];
+			[message addAttributeWithName:@"type" stringValue:@"chat"];
+			[message addAttributeWithName:@"to" stringValue:self.buddy.name];
+			[message addChild:body];
+			
+			[_chatManager.xmppStream sendElement:message];
 		
 		[self AddNewMessageToArray:messageContent];
 	}
@@ -115,6 +136,29 @@
 	
 	[_messageListArray addObject:person];
 	[_chatTableView reloadData];
+}
+
+#pragma mark- Message Delegate methods
+-(void)newMessageRecieved:(NSMutableDictionary *)messageContent
+{
+	NSString *m = [messageContent objectForKey:@"msg"];
+	
+	[messageContent setObject:[m substituteEmoticons] forKey:@"msg"];
+	[messageContent setObject:[NSString getCurrentTime] forKey:@"time"];
+	
+	Person* person = [[Person alloc]init];
+	
+	person.message.messageData = m ;
+	[_messageListArray addObject:person];
+	[_chatTableView reloadData];
+	
+	NSIndexPath *topIndexPath = [NSIndexPath indexPathForRow:_messageListArray.count-1
+												   inSection:0];
+	
+	[_chatTableView scrollToRowAtIndexPath:topIndexPath
+					  atScrollPosition:UITableViewScrollPositionMiddle
+							  animated:YES];
+	
 }
 
 @end

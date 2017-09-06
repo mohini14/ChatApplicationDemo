@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "FrndListTableCell.h"
+#import "ChatDelegate.h"
 
-@interface FrndListViewController : UIViewController<UITableViewDelegate, UITableViewDataSource>
+@interface FrndListViewController : UIViewController<UITableViewDelegate, UITableViewDataSource,ChatDelegate>
 
 @end

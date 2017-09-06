@@ -41,4 +41,7 @@
 // integer Constants
 #define kConstIntZero	0
 
+//Segue names
+#define kLoginToFrndListSegue @"LoginToFrndListVC"
+#define kFrndListToChatSegue  @"FrndListToChatVC"
 @end

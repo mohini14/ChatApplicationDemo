@@ -8,12 +8,12 @@
 
 #import "ChatManager.h"
 #import "ChatDelegate.h"
+#import "MessageDelegate.h"
 
 @implementation ChatManager
 {
-	XMPPStream* _xmppStream;
-    __weak NSObject* _chatDelegate;
-    __weak NSObject* _messageDelegate;
+    id<ChatDelegate> _chatDelegate;
+    id<MessageDelegate> _messageDelegate;
     BOOL _isOpen;
 }
 
@@ -105,18 +105,15 @@
     NSString* userName = [[sender myJID]user];
     NSString* presenceFromUser = [[presence from] user];
     
-//    if(![presenceFromUser isEqualToString:userName])
-//    {
-//       if([presenceType isEqualToString:@"available"])
-//       {
-//           [Cha newBuddyOnline:[NSString stringWithFormat:@"%@@%@", presenceFromUser, @"jerry.local"]];
-//        }
-//        else if ([presenceType isEqualToString:@"unavailable"])
-//        {
-//            
-//        }
-//    }
-    
+    if(![presenceFromUser isEqualToString:userName])
+    {
+       if([presenceType isEqualToString:@"available"])
+           [_chatDelegate newBuddyOnline:[NSString stringWithFormat:@"%@@%@", presenceFromUser, @"jerry.local"]];
+		
+        else if ([presenceType isEqualToString:@"unavailable"])
+			[_chatDelegate buddyWentOffline:[NSString stringWithFormat:@"%@@%@", presenceFromUser, @"jerry.local"]];
+    }
+	
 }
 
 - (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message {
@@ -127,8 +124,6 @@
     NSMutableDictionary *m = [[NSMutableDictionary alloc] init];
     [m setObject:msg forKey:@"msg"];
     [m setObject:from forKey:@"sender"];
-    
-//    [_messageDelegate newMessageReceived:m];
-    
+	[_messageDelegate newMessageRecieved:m];
 }
 @end

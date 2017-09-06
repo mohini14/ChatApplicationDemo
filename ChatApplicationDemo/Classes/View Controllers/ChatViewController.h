@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MessageDelegate.h"
 
-@interface ChatViewController : UIViewController<UITabBarDelegate, UITableViewDataSource>
+@interface ChatViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, MessageDelegate>
+
+@property (strong,nonatomic) Person* buddy;
 
 @end

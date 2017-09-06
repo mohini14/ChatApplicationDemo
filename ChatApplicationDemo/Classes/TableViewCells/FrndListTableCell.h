@@ -8,8 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "Person.h"
+#import "ChatDelegate.h"
 
 @interface FrndListTableCell : UITableViewCell
+
+@property (weak, nonatomic) IBOutlet UILabel *frndnameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *frndStatusLabel;
 
 -(void) setUPCell : (Person* )personDetails;
 

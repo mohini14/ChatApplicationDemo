@@ -23,4 +23,11 @@
     // Configure the view for the selected state
 }
 
+-(void) setUpcellAttributes:(Person *)personData
+{
+	self.messageTextLabel.text = personData.message.messageData;
+	self.messageTimeLabel.text = personData.message.messadgeDate;
+	self.messageSenderNameLabel.text = personData.message.messageType;
+}
+
 @end

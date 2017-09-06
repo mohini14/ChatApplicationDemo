@@ -29,6 +29,7 @@
 		15556A5B1F5822C30088CC7B /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15556A5A1F5822C30088CC7B /* LoginViewController.m */; };
 		15556A5E1F5822DE0088CC7B /* FrndListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15556A5D1F5822DE0088CC7B /* FrndListViewController.m */; };
 		15556A611F5822ED0088CC7B /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15556A601F5822ED0088CC7B /* ChatViewController.m */; };
+		15A273D11F5FF03000D608F4 /* NSString+ChatApplicationDemo.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A273D01F5FF03000D608F4 /* NSString+ChatApplicationDemo.m */; };
 		15A31B771F5D238C00A190B7 /* FrndListTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A31B761F5D238C00A190B7 /* FrndListTableCell.m */; };
 		15A31B811F5D277900A190B7 /* FrndListcell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15A31B801F5D277900A190B7 /* FrndListcell.xib */; };
 		15A31B871F5D307A00A190B7 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A31B861F5D307A00A190B7 /* Person.m */; };
@@ -77,6 +78,8 @@
 		15556A601F5822ED0088CC7B /* ChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatViewController.m; sourceTree = "<group>"; };
 		1591DCCE1F5F076900237B20 /* ChatDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatDelegate.h; sourceTree = "<group>"; };
 		1591DCCF1F5F085D00237B20 /* MessageDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageDelegate.h; sourceTree = "<group>"; };
+		15A273CF1F5FF03000D608F4 /* NSString+ChatApplicationDemo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+ChatApplicationDemo.h"; sourceTree = "<group>"; };
+		15A273D01F5FF03000D608F4 /* NSString+ChatApplicationDemo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+ChatApplicationDemo.m"; sourceTree = "<group>"; };
 		15A31B751F5D238C00A190B7 /* FrndListTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrndListTableCell.h; sourceTree = "<group>"; };
 		15A31B761F5D238C00A190B7 /* FrndListTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FrndListTableCell.m; sourceTree = "<group>"; };
 		15A31B801F5D277900A190B7 /* FrndListcell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FrndListcell.xib; sourceTree = "<group>"; };
@@ -316,6 +319,8 @@
 			children = (
 				15A31C271F5D325F00A190B7 /* NSDictionary+ChatApplicationDemo.h */,
 				15A31C281F5D325F00A190B7 /* NSDictionary+ChatApplicationDemo.m */,
+				15A273CF1F5FF03000D608F4 /* NSString+ChatApplicationDemo.h */,
+				15A273D01F5FF03000D608F4 /* NSString+ChatApplicationDemo.m */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -1598,6 +1603,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				15A273D11F5FF03000D608F4 /* NSString+ChatApplicationDemo.m in Sources */,
 				15556A5E1F5822DE0088CC7B /* FrndListViewController.m in Sources */,
 				15556A5B1F5822C30088CC7B /* LoginViewController.m in Sources */,
 				15A31B871F5D307A00A190B7 /* Person.m in Sources */,
@@ -1714,7 +1720,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 45C6ZJ7FZY;
-				GCC_PREFIX_HEADER = "/Users/mohini/Desktop/ChatApplicationDemo/ChatApplicationDemo/Resources/Others/ChatApplicationDemo-Prefix.pch";
+				GCC_PREFIX_HEADER = "/Users/mohini/Desktop/codebase/ChatApplicationDemo/ChatApplicationDemo/Resources/Others/ChatApplicationDemo-Prefix.pch";
 				INFOPLIST_FILE = ChatApplicationDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -1742,7 +1748,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 45C6ZJ7FZY;
-				GCC_PREFIX_HEADER = "/Users/mohini/Desktop/ChatApplicationDemo/ChatApplicationDemo/Resources/Others/ChatApplicationDemo-Prefix.pch";
+				GCC_PREFIX_HEADER = "/Users/mohini/Desktop/codebase/ChatApplicationDemo/ChatApplicationDemo/Resources/Others/ChatApplicationDemo-Prefix.pch";
 				INFOPLIST_FILE = ChatApplicationDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (

@@ -70,7 +70,7 @@
                     <connections>
                         <outlet property="passwordTextField" destination="Imj-Nj-b6n" id="hcw-am-g3P"/>
                         <outlet property="usernameTextField" destination="54Y-jK-EHg" id="09Q-XK-9ct"/>
-                        <segue destination="Mm7-LQ-1a9" kind="show" id="Zqc-wZ-ATo"/>
+                        <segue destination="Mm7-LQ-1a9" kind="show" identifier="LoginToFrndListVC" id="Zqc-wZ-ATo"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kvp-hd-7vD" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -122,8 +122,8 @@
                     </view>
                     <navigationItem key="navigationItem" id="aKg-aA-H4S"/>
                     <connections>
-                        <outlet property="frndListTableViewController" destination="Mjh-PG-OOO" id="3ll-wi-Q4U"/>
-                        <segue destination="PZf-b1-P9L" kind="show" id="23O-v3-h3t"/>
+                        <outlet property="_frndListTableView" destination="Mjh-PG-OOO" id="ee8-mB-lEc"/>
+                        <segue destination="PZf-b1-P9L" kind="show" identifier="FrndListToChatVC" id="23O-v3-h3t"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Shs-er-Nhc" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -166,6 +166,10 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="bNP-XC-7cJ">
                                 <rect key="frame" x="0.0" y="64" width="375" height="553"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="PZf-b1-P9L" id="Fek-lI-C9t"/>
+                                    <outlet property="delegate" destination="PZf-b1-P9L" id="JEC-nL-Cru"/>
+                                </connections>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Srq-Du-oUH">
                                 <rect key="frame" x="271" y="10" width="94" height="36"/>
@@ -203,7 +207,6 @@
                     </view>
                     <connections>
                         <outlet property="chatTableView" destination="bNP-XC-7cJ" id="J0Z-YU-8nS"/>
-                        <outlet property="closeChatButtonPressed" destination="KWm-NX-P1u" id="2tj-WU-GZU"/>
                         <outlet property="messageTextview" destination="YDt-S6-dgZ" id="rci-0r-hb7"/>
                     </connections>
                 </viewController>

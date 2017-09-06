@@ -32,7 +32,7 @@
 -(IBAction) loginButtonPressed:(id)sender
 {
 	// case: fileds are not empty
-	if(_usernameTextField.text.length > kConstIntZero && _passwordTextField.text.length > kConstIntZero)
+	if(_usernameTextField.text.length > kConstIntZero && _passwordTextField.text.length > kConstIntZero && [_usernameTextField.text isEqualToString:@"mohini"] && [_passwordTextField.text isEqualToString:@"123"])
 	{
 		NSDictionary* personDetailsDict = @{ kUserIdKey :_usernameTextField.text,
 											 kUserpasswordKey:_passwordTextField.text
@@ -41,7 +41,7 @@
 		// method will save user details in NSUserDefault
 		[[DataSession initWithDataSession] saveLoginCredentials:[[Person alloc] initWithPerson:personDetailsDict]];
 		
-		[self dismissViewControllerAnimated:YES completion:nil];
+		[self performSegueWithIdentifier:kLoginToFrndListSegue sender:self];
 	}
 	else
 		[Utility promptMessageOnScreen:NSLocalizedString(@"Please fill all the fields", nil) sender:self];
