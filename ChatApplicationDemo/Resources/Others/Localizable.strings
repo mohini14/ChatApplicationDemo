@@ -6,6 +6,11 @@
   Copyright © 2017 Mohini Sindhu . All rights reserved.
 */
 
+//General
+"AppName" = "Let's Chat";
+
 //Login VC strings
 "Please fill all the fields" = "Please fill all the fields";
-"AppName" = "Let's Chat";
+"Please try after sometime" = "Please try after sometime";
+
+

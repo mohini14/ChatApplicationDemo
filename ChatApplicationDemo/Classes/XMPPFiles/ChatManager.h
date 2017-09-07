@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+@import XMPPFramework;
 
 @interface ChatManager : NSObject<XMPPStreamDelegate>
 

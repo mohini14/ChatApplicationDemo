@@ -41,6 +41,7 @@
 		15A31C331F5D495400A190B7 /* RecievedMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A31C321F5D495400A190B7 /* RecievedMessageCell.m */; };
 		15A31C361F5D497300A190B7 /* SelfMessageTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A31C351F5D497300A190B7 /* SelfMessageTableCell.m */; };
 		15A31C391F5D5E4E00A190B7 /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A31C381F5D5E4E00A190B7 /* Utility.m */; };
+		15FA78941F613A58000844A8 /* BackgroundImage.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 15FA78931F613A58000844A8 /* BackgroundImage.jpg */; };
 		F6F80761F2E544C17FD6992B /* Pods_ChatApplicationDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65F647F56325656B46EEB7BE /* Pods_ChatApplicationDemo.framework */; };
 /* End PBXBuildFile section */
 
@@ -103,6 +104,7 @@
 		15A31C351F5D497300A190B7 /* SelfMessageTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelfMessageTableCell.m; sourceTree = "<group>"; };
 		15A31C371F5D5E4E00A190B7 /* Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utility.h; sourceTree = "<group>"; };
 		15A31C381F5D5E4E00A190B7 /* Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utility.m; sourceTree = "<group>"; };
+		15FA78931F613A58000844A8 /* BackgroundImage.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = BackgroundImage.jpg; sourceTree = "<group>"; };
 		52A4C747535CFF476B4A1A3D /* Pods-ChatApplicationDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatApplicationDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-ChatApplicationDemo/Pods-ChatApplicationDemo.release.xcconfig"; sourceTree = "<group>"; };
 		65F647F56325656B46EEB7BE /* Pods_ChatApplicationDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChatApplicationDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D38B69F727ADFB8000F07B0E /* Pods-ChatApplicationDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatApplicationDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChatApplicationDemo/Pods-ChatApplicationDemo.debug.xcconfig"; sourceTree = "<group>"; };
@@ -207,6 +209,7 @@
 		1555562C1F57E5F80088CC7B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				15FA78921F6139A9000844A8 /* Images */,
 				15A31B7F1F5D276D00A190B7 /* XIB */,
 				1555562D1F57E5F80088CC7B /* Others */,
 				1555562F1F57E5F80088CC7B /* StoryBoards */,
@@ -1434,6 +1437,14 @@
 			path = Utils;
 			sourceTree = "<group>";
 		};
+		15FA78921F6139A9000844A8 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				15FA78931F613A58000844A8 /* BackgroundImage.jpg */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
 		3469CC6155A18B113AB23648 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -1531,6 +1542,7 @@
 				155556371F57E5F80088CC7B /* LaunchScreen.storyboard in Resources */,
 				1502A7E41F5EA4D400CD4BD7 /* Localizable.strings in Resources */,
 				15A31C2E1F5D491200A190B7 /* RecievedMessageCell.xib in Resources */,
+				15FA78941F613A58000844A8 /* BackgroundImage.jpg in Resources */,
 				15A31B811F5D277900A190B7 /* FrndListcell.xib in Resources */,
 				15A31C301F5D492C00A190B7 /* SelfMessageTableCell.xib in Resources */,
 			);

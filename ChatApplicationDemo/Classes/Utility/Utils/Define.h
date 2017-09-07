@@ -22,7 +22,7 @@
 #define kSelfmessageNIBName		@"SelfMessageTableCell"
 
 //Constant Colors
-#define kAppMainColor [UIColor colorWithRed:0.871 green:0.345 blue:0.388 alpha:1.0]
+#define kAppMainColor [UIColor colorWithRed:14.0/255.0 green:77.0/255.0 blue:67.0/255.0 alpha:1.0]
 
 //Keys
 #define kUserNameKey     @"userName"
@@ -44,4 +44,8 @@
 //Segue names
 #define kLoginToFrndListSegue @"LoginToFrndListVC"
 #define kFrndListToChatSegue  @"FrndListToChatVC"
+
+//NotificationNames
+#define kcheckLoggingInNotification @"checkLoggingIn"
+
 @end

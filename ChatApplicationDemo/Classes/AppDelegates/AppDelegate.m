@@ -59,7 +59,7 @@
 {
 	[[UINavigationBar appearance] setBarTintColor:kAppMainColor];
 	[[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
-	[[UINavigationBar appearance] setTranslucent:FALSE];
+	[[UINavigationBar appearance] setTranslucent:TRUE];
 	[[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
 }
 

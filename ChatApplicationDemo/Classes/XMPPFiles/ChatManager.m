@@ -10,11 +10,20 @@
 #import "ChatDelegate.h"
 #import "MessageDelegate.h"
 
+#if DEBUG
+static const int ddLogLevel = DDLogLevelVerbose;
+#else
+static const int ddLogLevel = DDLogLevelInfo;
+#endif
+
+
 @implementation ChatManager
 {
     id<ChatDelegate> _chatDelegate;
     id<MessageDelegate> _messageDelegate;
     BOOL _isOpen;
+	NSString* _userId;
+	NSString* _password;
 }
 
 + (ChatManager*) sharedInstance
@@ -24,15 +33,22 @@
 	static dispatch_once_t oncePredicate;
  
 	dispatch_once(&oncePredicate, ^{
+		
 		_sharedInstance = [[ChatManager alloc] init];
+		
+		// add methods which takes care of logging
+		[DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:ddLogLevel];
 	});
 	return _sharedInstance;
 }
 
+#pragma mark- Private methods
 // method creates the channel to manage the exchange of messages.
 -(void) setUpStream
 {
 	_xmppStream = [[XMPPStream alloc]init];
+	
+	[_xmppStream setHostName:@"192.168.11.117"];
 	[_xmppStream addDelegate:self delegateQueue:dispatch_get_main_queue()];
 }
 
@@ -49,31 +65,34 @@
 	[_xmppStream sendElement:presence];
 }
 
+#pragma mark- Public method definations
 -(BOOL) connect
 {
 	// Establish connection with XMPP
 	[self setUpStream];
 	
-	NSString* jabberID = [[NSUserDefaults standardUserDefaults] stringForKey:kUserIdKey];
-	NSString* passwoed = [[NSUserDefaults standardUserDefaults] stringForKey:kUserpasswordKey];
+	_userId = [[NSUserDefaults standardUserDefaults] stringForKey:kUserIdKey];
+	_password = [[NSUserDefaults standardUserDefaults] stringForKey:kUserpasswordKey];
 	
 	if(![_xmppStream isDisconnected])
 		return YES;
 	
-	if(jabberID == nil || passwoed == nil)
+	if(_userId == nil || _password == nil)
 		return NO;
 	
-	if(jabberID.length < kConstIntZero || passwoed.length < kConstIntZero)
+	if(_userId.length < kConstIntZero || _password.length < kConstIntZero)
 		return NO;
 	
 	//set JID
-	[_xmppStream setMyJID:[XMPPJID jidWithString:jabberID]];
+	[_xmppStream setMyJID:[XMPPJID jidWithString:_userId]];
 	
 	NSError* error = nil;
-	if(![_xmppStream connectWithTimeout:10 error:&error])
+	if(![_xmppStream connectWithTimeout:XMPPStreamTimeoutNone error:&error])
 	{
 		[Utility promptMessageOnScreen:error.localizedDescription sender:nil];
 		return NO;
+		
+		DDLogError(@"Error connecting: %@", error);
 	}
 	
 	return YES;
@@ -85,18 +104,35 @@
 	[_xmppStream disconnect];
 }
 
+#pragma mark- XMPP Delegate methods
+- (void)xmppStream:(XMPPStream *)sender didNotAuthenticate:(NSXMLElement *)error
+{
+	DDLogVerbose(@"%@: %@", THIS_FILE, THIS_METHOD);
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:kcheckLoggingInNotification
+														object:[NSNumber numberWithBool:NO]];
+}
+
 -(void)xmppStreamDidConnect:(XMPPStream *)sender
 {
     _isOpen = YES;
     NSError* error = nil;
     
-    if([[NSUserDefaults standardUserDefaults] stringForKey:kUserpasswordKey])
-        [_xmppStream authenticateWithPassword:[[NSUserDefaults standardUserDefaults] stringForKey:kUserpasswordKey] error:&error ];
+    if(_password)
+        [_xmppStream authenticateWithPassword:_password error:&error ];
+	else
+		DDLogError(@"Authentication failed: %@", error);
 }
 
 -(void)xmppStreamDidAuthenticate:(XMPPStream *)sender
 {
+	DDLogVerbose(@"%@: %@", THIS_FILE, THIS_METHOD);
+
     [self goOnline];
+	
+	// on successfull authentication
+	[[NSNotificationCenter defaultCenter] postNotificationName:kcheckLoggingInNotification
+														object:[NSNumber numberWithBool:YES]];
 }
 
 -(void)xmppStream:(XMPPStream *)sender didReceivePresence:(XMPPPresence *)presence
