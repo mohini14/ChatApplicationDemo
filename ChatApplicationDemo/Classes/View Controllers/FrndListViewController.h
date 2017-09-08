@@ -9,7 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "FrndListTableCell.h"
 #import "ChatDelegate.h"
+@import CoreData;
 
-@interface FrndListViewController : UIViewController<UITableViewDelegate, UITableViewDataSource,ChatDelegate>
+@interface FrndListViewController : UIViewController<UITableViewDelegate, UITableViewDataSource,ChatDelegate, NSFetchedResultsControllerDelegate>
 
 @end

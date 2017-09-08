@@ -17,6 +17,8 @@
 	NSMutableArray<Person* >* _frndListArray;
 	ChatManager* _chatManger;
 	id<ChatDelegate > _chatDelegate;
+	
+	NSFetchedResultsController* _fetchedResultsControllerObj;
 }
 
 @end
@@ -29,8 +31,8 @@
 	
 	_chatManger = kChatManagerSingletonObj;
 	
-	[_chatManger setUpStream];
-	_chatDelegate = self;
+//	[_chatManger setUpStream];
+//	_chatDelegate = self;
 	[self initialVCSetup];
 }
 
@@ -42,9 +44,8 @@
 -(void)viewDidAppear:(BOOL)animated
 {
 	[super viewDidAppear:animated];
-	[self checkLoging];
+//	[self checkLoging];
 }
-
 
 #pragma mark- Initial VC setup
 -(void) initialVCSetup
@@ -77,44 +78,51 @@
 }
 
 #pragma mark- Actions on VC
--(IBAction)showLogin:(id)sender
-{
-	LoginViewController* loginVC = [[LoginViewController alloc]init];
-	[self presentViewController:loginVC animated:YES completion:nil];
-}
+//-(IBAction)showLogin:(id)sender
+//{
+//	LoginViewController* loginVC = [[LoginViewController alloc]init];
+//	[self presentViewController:loginVC animated:YES completion:nil];
+//}
 
-#pragma mark- Private methods
--(void) checkLoging
-{
-	NSString* userId = [[NSUserDefaults standardUserDefaults] objectForKey: kUserIdKey];
-	
-	if(!userId)
-		[self showLogin:nil];
-	else if ([_chatManger connect])
-	{
-		NSLog(@"Show buddy list");
-		[_chatDelegate newBuddyOnline:userId];
-	}
-}
+//#pragma mark- Private methods
+//-(void) checkLoging
+//{
+//	NSString* userId = [[NSUserDefaults standardUserDefaults] objectForKey: kUserIdKey];
+//	
+//	if(!userId)
+//		[self showLogin:nil];
+//	else if ([_chatManger connect])
+//	{
+//		NSLog(@"Show buddy list");
+//		[_chatDelegate newBuddyOnline:userId];
+//	}
+//}
 
-#pragma mark- Chat Delegate Delegates
-- (void)newBuddyOnline:(NSString *)buddyName
-{
-	Person* person = [[Person alloc]init];
-	person.name = buddyName;
-	[_frndListArray addObject:person];
-	[_frndListTableView reloadData];
-}
-
-- (void)buddyWentOffline:(NSString *)buddyName
-{
-	Person* person = [[Person alloc]init];
-	person.name = buddyName;
-
-	[_frndListArray removeObject:person];
-	[_frndListTableView reloadData];
-}
+//#pragma mark- Chat Delegate Delegates
+//- (void)newBuddyOnline:(NSString *)buddyName
+//{
+//	Person* person = [[Person alloc]init];
+//	person.name = buddyName;
+//	[_frndListArray addObject:person];
+//	[_frndListTableView reloadData];
+//}
+//
+//- (void)buddyWentOffline:(NSString *)buddyName
+//{
+//	Person* person = [[Person alloc]init];
+//	person.name = buddyName;
+//
+//	[_frndListArray removeObject:person];
+////	[_frndListTableView reloadData];
+//}
 #pragma mark- XMPP related methods
+
+#pragma mark- NSFetchedResultsController Delegate
+-(void)controllerDidChangeContent:(NSFetchedResultsController *)controller
+{
+	
+}
+
 
 #pragma mark- Navigation Methods
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

@@ -10,8 +10,8 @@
 @import XMPPFramework;
 
 @interface ChatManager : NSObject<XMPPStreamDelegate>
+@property (strong, nonatomic) 	XMPPStream* xmppStream;
 
-@property (strong, nonatomic) XMPPStream* xmppStream;
 -(BOOL) connect;
 -(void) disconnect;
 -(void) goOnline;

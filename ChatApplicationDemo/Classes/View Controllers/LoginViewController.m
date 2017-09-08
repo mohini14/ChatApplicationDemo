@@ -29,6 +29,16 @@
     [super didReceiveMemoryWarning];
 }
 
+-(void)dealloc
+{
+	[[NSNotificationCenter defaultCenter] removeObserver:kcheckLoggingInNotification];
+}
+
+-(void) viewDidDisappear:(BOOL)animated
+{
+	[[NSNotificationCenter defaultCenter] removeObserver:kcheckLoggingInNotification];
+}
+
 #pragma mark- Private methods
 -(void) initialVCSetup
 {
@@ -69,6 +79,9 @@
 		NSDictionary* personDetailsDict = @{ kUserIdKey :_usernameTextField.text,
 											 kUserpasswordKey:_passwordTextField.text
 											};
+		NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+		[userDefaults setObject:personDetailsDict[kUserIdKey] forKey:kUserIdKey];
+		[userDefaults setObject:personDetailsDict[kUserpasswordKey] forKey:kUserpasswordKey];
 		
 		// method will save user details in NSUserDefault
 		[[DataSession initWithDataSession] saveLoginCredentials:[[Person alloc] initWithPerson:personDetailsDict]];

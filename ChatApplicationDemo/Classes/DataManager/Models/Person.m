@@ -17,7 +17,7 @@
 	self = [super init];
 	if(self)
 	{
-		self.loginId  = [personDetails stringForKey:kUserpasswordKey];
+		self.loginId  = [personDetails stringForKey:kUserIdKey];
 		self.name     = [personDetails stringForKey:kUserNameKey];
 		self.password = [personDetails stringForKey:kUserpasswordKey];
 		self.message  = [[Message alloc]initWithMessage:[personDetails dictForKey:kMessageKey]];

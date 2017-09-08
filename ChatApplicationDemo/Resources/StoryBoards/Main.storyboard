@@ -95,19 +95,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="seY-3H-4Se">
-                                <rect key="frame" x="0.0" y="617" width="375" height="50"/>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="Hhs-dT-w4W"/>
-                                </constraints>
-                                <state key="normal" title="Show Login"/>
-                                <connections>
-                                    <action selector="logginButtonPressed:" destination="Mm7-LQ-1a9" eventType="touchUpInside" id="UbQ-3b-0ig"/>
-                                </connections>
-                            </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Mjh-PG-OOO">
-                                <rect key="frame" x="0.0" y="64" width="375" height="553"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <outlet property="dataSource" destination="Mm7-LQ-1a9" id="Di8-yt-yj2"/>
@@ -117,12 +106,9 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="seY-3H-4Se" secondAttribute="trailing" id="BIE-Lm-Ps8"/>
-                            <constraint firstItem="seY-3H-4Se" firstAttribute="top" secondItem="Mjh-PG-OOO" secondAttribute="bottom" id="LzW-Kf-LRm"/>
+                            <constraint firstItem="oul-ga-eSY" firstAttribute="top" secondItem="Mjh-PG-OOO" secondAttribute="bottom" id="ULk-qg-gmF"/>
                             <constraint firstItem="Mjh-PG-OOO" firstAttribute="top" secondItem="PFs-JL-LkY" secondAttribute="bottom" id="flx-Vw-eHq"/>
-                            <constraint firstItem="seY-3H-4Se" firstAttribute="leading" secondItem="0oZ-3M-6Hz" secondAttribute="leading" id="jKL-Yq-FcO"/>
                             <constraint firstAttribute="trailing" secondItem="Mjh-PG-OOO" secondAttribute="trailing" id="pfA-SQ-mhQ"/>
-                            <constraint firstItem="oul-ga-eSY" firstAttribute="top" secondItem="seY-3H-4Se" secondAttribute="bottom" id="tNY-F0-Thq"/>
                             <constraint firstItem="Mjh-PG-OOO" firstAttribute="leading" secondItem="0oZ-3M-6Hz" secondAttribute="leading" id="zqy-Xa-bZ4"/>
                         </constraints>
                     </view>

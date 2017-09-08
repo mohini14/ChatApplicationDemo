@@ -24,22 +24,26 @@ static const int ddLogLevel = DDLogLevelInfo;
     BOOL _isOpen;
 	NSString* _userId;
 	NSString* _password;
+	XMPPRosterCoreDataStorage*	_xmppRosterStorage;
 }
 
 + (ChatManager*) sharedInstance
 {
-	static ChatManager* _sharedInstance = nil;
-	
+	static ChatManager* sharedInstance = nil;
+
 	static dispatch_once_t oncePredicate;
  
-	dispatch_once(&oncePredicate, ^{
-		
-		_sharedInstance = [[ChatManager alloc] init];
-		
-		// add methods which takes care of logging
-		[DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:ddLogLevel];
-	});
-	return _sharedInstance;
+	if(sharedInstance == nil)
+	{
+		dispatch_once(&oncePredicate, ^{
+			
+			sharedInstance = [[ChatManager alloc] init];
+			
+			// add methods which takes care of logging
+			[DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:ddLogLevel];
+		});
+	}
+	return sharedInstance;
 }
 
 #pragma mark- Private methods
@@ -48,8 +52,26 @@ static const int ddLogLevel = DDLogLevelInfo;
 {
 	_xmppStream = [[XMPPStream alloc]init];
 	
-	[_xmppStream setHostName:@"192.168.11.117"];
+#if !TARGET_IPHONE_SIMULATOR
+	{
+		// Want xmpp to run in the background?
+		//
+		// P.S. - The simulator doesn't support backgrounding yet.
+		//        When you try to set the associated property on the simulator, it simply fails.
+		//        And when you background an app on the simulator,
+		//        it just queues network traffic til the app is foregrounded again.
+		//        We are patiently waiting for a fix from Apple.
+		//        If you do enableBackgroundingOnSocket on the simulator,
+		//        you will simply see an error message from the xmpp stack when it fails to set the property.
+		
+		_xmppStream.enableBackgroundingOnSocket = YES;
+	}
+#endif
+
 	[_xmppStream addDelegate:self delegateQueue:dispatch_get_main_queue()];
+	[_xmppStream setHostName:@"192.168.11.117"];
+	[_xmppStream setHostPort:5222];
+
 }
 
 //method let's a user to go online
@@ -87,7 +109,7 @@ static const int ddLogLevel = DDLogLevelInfo;
 	[_xmppStream setMyJID:[XMPPJID jidWithString:_userId]];
 	
 	NSError* error = nil;
-	if(![_xmppStream connectWithTimeout:XMPPStreamTimeoutNone error:&error])
+	if(![_xmppStream connectWithTimeout:30 error:&error])
 	{
 		[Utility promptMessageOnScreen:error.localizedDescription sender:nil];
 		return NO;
@@ -113,6 +135,10 @@ static const int ddLogLevel = DDLogLevelInfo;
 														object:[NSNumber numberWithBool:NO]];
 }
 
+- (void)xmppStream:(XMPPStream *)sender didNotRegister:(NSXMLElement *)error
+{
+	NSLog(@"call....");
+}
 -(void)xmppStreamDidConnect:(XMPPStream *)sender
 {
     _isOpen = YES;
@@ -133,6 +159,28 @@ static const int ddLogLevel = DDLogLevelInfo;
 	// on successfull authentication
 	[[NSNotificationCenter defaultCenter] postNotificationName:kcheckLoggingInNotification
 														object:[NSNumber numberWithBool:YES]];
+}
+
+- (void) xmppStream:(XMPPStream*)sender socketDidConnect:(GCDAsyncSocket*)socket
+{
+	DDLogVerbose(@"%@: %@", THIS_FILE, THIS_METHOD);
+}
+
+
+- (void)xmppStream:(XMPPStream *)sender willSecureWithSettings:(NSMutableDictionary *)settings
+{
+	DDLogVerbose(@"%@: %@", THIS_FILE, THIS_METHOD);
+	
+	NSString *expectedCertName = [_xmppStream.myJID domain];
+	if (expectedCertName)
+	{
+		settings[(NSString *) kCFStreamSSLPeerName] = expectedCertName;
+	}
+	
+//	if (_customCertEvaluation)
+//	{
+//		settings[GCDAsyncSocketManuallyEvaluateTrust] = @(YES);
+//	}
 }
 
 -(void)xmppStream:(XMPPStream *)sender didReceivePresence:(XMPPPresence *)presence
@@ -162,4 +210,68 @@ static const int ddLogLevel = DDLogLevelInfo;
     [m setObject:from forKey:@"sender"];
 	[_messageDelegate newMessageRecieved:m];
 }
+
+#pragma mark- NSFetchedresults Controller Methods
+-(NSFetchedResultsController* ) fetchFetchResultsControllerObj
+{
+	NSManagedObjectContext* managedObjectContext = [self managedObjectContext_roster];
+	
+	NSEntityDescription* entity = [NSEntityDescription entityForName:@"XMPPUserCoreDataStorageObject" inManagedObjectContext:managedObjectContext];
+	
+	NSSortDescriptor* descriptor1 = [[NSSortDescriptor alloc] initWithKey:@"sectionNum" ascending:YES];
+	NSSortDescriptor* descriptor2 = [[NSSortDescriptor alloc] initWithKey:@"displayName" ascending:YES];
+	
+	NSArray* sortDescriptorArray = @[descriptor1, descriptor2];
+	
+	NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+	
+	[fetchRequest setEntity:entity];
+	[fetchRequest setSortDescriptors:sortDescriptorArray];
+	[fetchRequest setFetchBatchSize:10];
+	
+	NSFetchedResultsController* fetchedResultsControllerObj = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:managedObjectContext sectionNameKeyPath:@"sectionNum" cacheName:nil];
+	
+	NSError* error = nil;
+	if(![fetchedResultsControllerObj performFetch:&error])
+		DDLogError(@"error in fetching: %@", error);
+	
+	return fetchedResultsControllerObj;
+	
+}
+
+- (NSArray*) fetchMessage:(NSString*)userId
+{
+	XMPPMessageArchivingCoreDataStorage *storage = [XMPPMessageArchivingCoreDataStorage sharedInstance];
+	NSManagedObjectContext *managedObjContext = [storage mainThreadManagedObjectContext];
+	
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"XMPPMessageArchiving_Message_CoreDataObject"
+											  inManagedObjectContext:managedObjContext];
+	
+	NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+	
+	fetchRequest.predicate = [NSPredicate predicateWithFormat:@"bareJidStr = %@", userId];
+	[fetchRequest setEntity:entity];
+	
+	NSError *error = nil;
+	NSArray *messagesArray = [managedObjContext executeFetchRequest:fetchRequest error:&error];
+	NSMutableArray* messages = [[NSMutableArray alloc] initWithCapacity:messagesArray.count];
+	[messagesArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+		id messageObject = [messagesArray objectAtIndex:idx];
+		if ([messageObject isKindOfClass:[XMPPMessageArchiving_Message_CoreDataObject class]]) {
+			
+			XMPPMessageArchiving_Message_CoreDataObject *currentMessageCoreDataObject = (XMPPMessageArchiving_Message_CoreDataObject*)messageObject;
+			XMPPMessage *message = currentMessageCoreDataObject.message;
+			if (message!=nil) {
+				[messages addObject:message];
+			}
+		}
+	}];
+	return messages;
+}
+
+- (NSManagedObjectContext *)managedObjectContext_roster
+{
+	return [_xmppRosterStorage mainThreadManagedObjectContext];
+}
+
 @end
