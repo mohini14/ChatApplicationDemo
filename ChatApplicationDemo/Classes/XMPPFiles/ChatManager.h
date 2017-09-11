@@ -9,8 +9,7 @@
 #import <Foundation/Foundation.h>
 @import XMPPFramework;
 
-@interface ChatManager : NSObject<XMPPStreamDelegate>
-@property (strong, nonatomic) 	XMPPStream* xmppStream;
+@interface ChatManager : NSObject<XMPPStreamDelegate, XMPPRosterDelegate>
 
 -(BOOL) connect;
 -(void) disconnect;
@@ -19,6 +18,8 @@
 -(void) setUpStream;
 
 +(instancetype) sharedInstance;
+-(NSFetchedResultsController* ) fetchFetchResultsControllerObj;
+- (NSArray*) fetchMessage:(NSString*)userId;
 
 #define kChatManagerSingletonObj [ChatManager sharedInstance]
 

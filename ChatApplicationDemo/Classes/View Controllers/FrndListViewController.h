@@ -11,6 +11,6 @@
 #import "ChatDelegate.h"
 @import CoreData;
 
-@interface FrndListViewController : UIViewController<UITableViewDelegate, UITableViewDataSource,ChatDelegate, NSFetchedResultsControllerDelegate>
+@interface FrndListViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate>
 
 @end

@@ -19,12 +19,27 @@ static const int ddLogLevel = DDLogLevelInfo;
 
 @implementation ChatManager
 {
-    id<ChatDelegate> _chatDelegate;
-    id<MessageDelegate> _messageDelegate;
-    BOOL _isOpen;
+    BOOL _isConnectionOpen;
+	BOOL _customerCartEvaluation;
+	
 	NSString* _userId;
 	NSString* _password;
-	XMPPRosterCoreDataStorage*	_xmppRosterStorage;
+	
+	
+	XMPPStream* _xmppStream;
+	XMPPReconnect* _xmppReconnect;
+	
+	XMPPRoster* _xmppRoster;
+	XMPPvCardCoreDataStorage* _xmppVCardDataStorage;
+	XMPPRosterCoreDataStorage*	_xmppRosterCoreDataStorage;
+	XMPPvCardTempModule* _xmppVCardTempModule;
+	XMPPvCardAvatarModule* _xmppvCardAvatarModule;
+	
+	XMPPCapabilities* _xmppCapabilities;
+	XMPPCapabilitiesCoreDataStorage* _xmppCapabilitiesCoreDataStorage;
+	
+	XMPPMessageArchivingCoreDataStorage* _xmppMessageArchivingCoreDataStorage;
+	XMPPMessageArchiving* _xmppMessageArchiving;
 }
 
 + (ChatManager*) sharedInstance
@@ -68,7 +83,47 @@ static const int ddLogLevel = DDLogLevelInfo;
 	}
 #endif
 
+	// for reconnecting in case of dissconection accidently
+	_xmppReconnect = [[XMPPReconnect alloc] init];
+	
+	// roster basically defines your contact lists
+	_xmppRosterCoreDataStorage = [[XMPPRosterCoreDataStorage alloc] init];
+	_xmppRoster = [[XMPPRoster alloc] initWithRosterStorage:_xmppRosterCoreDataStorage];
+	_xmppRoster.autoFetchRoster = YES;
+	_xmppRoster.autoAcceptKnownPresenceSubscriptionRequests = YES;
+	
+	//vCard is to cache the Roster Images
+	_xmppVCardDataStorage = [XMPPvCardCoreDataStorage sharedInstance];
+	_xmppVCardTempModule  = [[XMPPvCardTempModule alloc] initWithvCardStorage:_xmppVCardDataStorage];
+	_xmppvCardAvatarModule = [[XMPPvCardAvatarModule alloc] initWithvCardTempModule:_xmppVCardTempModule];
+	
+	// capability basically defines the list of things the client supports (Images, video etc) when it brodcasts itself
+	_xmppCapabilitiesCoreDataStorage = [XMPPCapabilitiesCoreDataStorage sharedInstance];
+	_xmppCapabilities = [[XMPPCapabilities alloc] initWithCapabilitiesStorage:_xmppCapabilitiesCoreDataStorage];
+	_xmppCapabilities.autoFetchHashedCapabilities = YES;
+	_xmppCapabilities.autoFetchNonHashedCapabilities = NO;
+	
+	// manages message archiving
+	_xmppMessageArchivingCoreDataStorage = [XMPPMessageArchivingCoreDataStorage sharedInstance];
+	_xmppMessageArchiving = [[XMPPMessageArchiving alloc] initWithMessageArchivingStorage:_xmppMessageArchivingCoreDataStorage];
+	
+	// to set Archiving only for the sender(Client side)
+	[_xmppMessageArchiving setClientSideMessageArchivingOnly:YES];
+	
+	// Activate all the modules
+	_customerCartEvaluation = YES;
+	[_xmppReconnect activate:_xmppStream];
+	[_xmppRoster activate:_xmppStream];
+	[_xmppVCardTempModule activate:_xmppStream];
+	[_xmppvCardAvatarModule activate:_xmppStream];
+	[_xmppCapabilities activate:_xmppStream];
+	[_xmppMessageArchiving activate:_xmppStream];
+	
+	// adding delegates to module as this class
 	[_xmppStream addDelegate:self delegateQueue:dispatch_get_main_queue()];
+	[_xmppRoster addDelegate:self delegateQueue:dispatch_get_main_queue()];
+	[_xmppMessageArchiving addDelegate:self delegateQueue:dispatch_get_main_queue()];
+	
 	[_xmppStream setHostName:@"192.168.11.117"];
 	[_xmppStream setHostPort:5222];
 
@@ -85,6 +140,81 @@ static const int ddLogLevel = DDLogLevelInfo;
 {
 	XMPPPresence *presence = [XMPPPresence presenceWithType:@"unavailable"];
 	[_xmppStream sendElement:presence];
+}
+
+#pragma mark- Core Data Methods
+
+// as NSManaged Object context is not thread safe . It is not safe to use it outside main thread
+-(NSManagedObjectContext* )managedObjectContext_roster
+{
+	return [_xmppRosterCoreDataStorage mainThreadManagedObjectContext];
+}
+
+-(NSManagedObjectContext* )managedObjectContext_capabilities
+{
+	return [_xmppCapabilitiesCoreDataStorage mainThreadManagedObjectContext];
+}
+
+#pragma mark- Roster Delegates
+- (void)xmppRoster:(XMPPRoster *)sender didReceiveBuddyRequest:(XMPPPresence *)presence
+{
+	DDLogVerbose(@"%@: %@", THIS_FILE, THIS_METHOD);
+	XMPPUserCoreDataStorageObject* userData = [_xmppRosterCoreDataStorage userForJID:[presence from] xmppStream:_xmppStream managedObjectContext:[self managedObjectContext_roster]];
+	
+	NSString* userName = [userData displayName];
+	NSString* jidStrBare = [presence fromStr];
+	NSString* body = nil;
+	
+	if(![userName isEqualToString:jidStrBare])
+		body = [NSString stringWithFormat:@"Buddy requestFrom %@ <%@>", userName,jidStrBare];
+	else
+		body = [NSString stringWithFormat:@"Buddy requestFrom %@", userName];
+	
+	// pop notification of incoming user
+	
+	// if application is running
+	if([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
+	{
+		// pop user presence work to be done
+	}
+	else
+	{
+		UILocalNotification* localNotification = [[UILocalNotification alloc] init];
+		localNotification.alertBody = body;
+		
+		[[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+	}
+}
+
+- (void)xmppRoster:(XMPPRoster *)sender didReceivePresenceSubscriptionRequest:(XMPPPresence *)presence
+{
+	XMPPUserCoreDataStorageObject *user = [_xmppRosterCoreDataStorage
+										   userForJID:[presence from]
+										   xmppStream:_xmppStream
+										   managedObjectContext:[self managedObjectContext_roster]];
+	
+	DDLogVerbose(@"didReceivePresenceSubscriptionRequest from user %@ ",
+				 user.jidStr); [_xmppRoster
+								acceptPresenceSubscriptionRequestFrom:[presence from]
+								andAddToRoster:YES];
+}
+
+#pragma mark- method to auto reconnect user
+- (BOOL)xmppReconnect:(XMPPReconnect *)sender shouldAttemptAutoReconnect:(SCNetworkReachabilityFlags)reachabilityFlags
+{
+	DDLogVerbose(@"---------- xmppReconnect:shouldAttemptAutoReconnect: ----------");
+	
+	return YES;
+}
+
+#pragma mark Capabilities
+
+- (void)xmppCapabilities:(XMPPCapabilities *)sender didDiscoverCapabilities:(NSXMLElement *)caps forJID:(XMPPJID *)jid
+{
+	DDLogVerbose(@"---------- xmppCapabilities:didDiscoverCapabilities:forJID: ----------");
+	DDLogVerbose(@"jid: %@", jid);
+	DDLogVerbose(@"capabilities:\n%@",
+				 [caps XMLStringWithOptions:(NSXMLNodeCompactEmptyElement | NSXMLNodePrettyPrint)]);
 }
 
 #pragma mark- Public method definations
@@ -141,7 +271,7 @@ static const int ddLogLevel = DDLogLevelInfo;
 }
 -(void)xmppStreamDidConnect:(XMPPStream *)sender
 {
-    _isOpen = YES;
+    _isConnectionOpen = YES;
     NSError* error = nil;
     
     if(_password)
@@ -185,30 +315,30 @@ static const int ddLogLevel = DDLogLevelInfo;
 
 -(void)xmppStream:(XMPPStream *)sender didReceivePresence:(XMPPPresence *)presence
 {
-    NSString* presenceType = [presence type];
-    NSString* userName = [[sender myJID]user];
-    NSString* presenceFromUser = [[presence from] user];
-    
-    if(![presenceFromUser isEqualToString:userName])
-    {
-       if([presenceType isEqualToString:@"available"])
-           [_chatDelegate newBuddyOnline:[NSString stringWithFormat:@"%@@%@", presenceFromUser, @"jerry.local"]];
-		
-        else if ([presenceType isEqualToString:@"unavailable"])
-			[_chatDelegate buddyWentOffline:[NSString stringWithFormat:@"%@@%@", presenceFromUser, @"jerry.local"]];
-    }
+//    NSString* presenceType = [presence type];
+//    NSString* userName = [[sender myJID]user];
+//    NSString* presenceFromUser = [[presence from] user];
+//    
+//    if(![presenceFromUser isEqualToString:userName])
+//    {
+//       if([presenceType isEqualToString:@"available"])
+//           [_chatDelegate newBuddyOnline:[NSString stringWithFormat:@"%@@%@", presenceFromUser, @"jerry.local"]];
+//		
+//        else if ([presenceType isEqualToString:@"unavailable"])
+//			[_chatDelegate buddyWentOffline:[NSString stringWithFormat:@"%@@%@", presenceFromUser, @"jerry.local"]];
+//    }
 	
 }
 
 - (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message {
-    
-    NSString *msg = [[message elementForName:@"body"] stringValue];
-    NSString *from = [[message attributeForName:@"from"] stringValue];
-    
-    NSMutableDictionary *m = [[NSMutableDictionary alloc] init];
-    [m setObject:msg forKey:@"msg"];
-    [m setObject:from forKey:@"sender"];
-	[_messageDelegate newMessageRecieved:m];
+//    
+//    NSString *msg = [[message elementForName:@"body"] stringValue];
+//    NSString *from = [[message attributeForName:@"from"] stringValue];
+//    
+//    NSMutableDictionary *m = [[NSMutableDictionary alloc] init];
+//    [m setObject:msg forKey:@"msg"];
+//    [m setObject:from forKey:@"sender"];
+//	[_messageDelegate newMessageRecieved:m];
 }
 
 #pragma mark- NSFetchedresults Controller Methods
@@ -216,6 +346,9 @@ static const int ddLogLevel = DDLogLevelInfo;
 {
 	NSManagedObjectContext* managedObjectContext = [self managedObjectContext_roster];
 	
+	NSFetchedResultsController* fetchedResultsControllerObj;
+	if(managedObjectContext)
+	{
 	NSEntityDescription* entity = [NSEntityDescription entityForName:@"XMPPUserCoreDataStorageObject" inManagedObjectContext:managedObjectContext];
 	
 	NSSortDescriptor* descriptor1 = [[NSSortDescriptor alloc] initWithKey:@"sectionNum" ascending:YES];
@@ -229,12 +362,12 @@ static const int ddLogLevel = DDLogLevelInfo;
 	[fetchRequest setSortDescriptors:sortDescriptorArray];
 	[fetchRequest setFetchBatchSize:10];
 	
-	NSFetchedResultsController* fetchedResultsControllerObj = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:managedObjectContext sectionNameKeyPath:@"sectionNum" cacheName:nil];
+	fetchedResultsControllerObj = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:managedObjectContext sectionNameKeyPath:@"sectionNum" cacheName:nil];
 	
 	NSError* error = nil;
 	if(![fetchedResultsControllerObj performFetch:&error])
 		DDLogError(@"error in fetching: %@", error);
-	
+	}
 	return fetchedResultsControllerObj;
 	
 }
@@ -257,7 +390,8 @@ static const int ddLogLevel = DDLogLevelInfo;
 	NSMutableArray* messages = [[NSMutableArray alloc] initWithCapacity:messagesArray.count];
 	[messagesArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
 		id messageObject = [messagesArray objectAtIndex:idx];
-		if ([messageObject isKindOfClass:[XMPPMessageArchiving_Message_CoreDataObject class]]) {
+		if ([messageObject isKindOfClass:[XMPPMessageArchiving_Message_CoreDataObject class]])
+		{
 			
 			XMPPMessageArchiving_Message_CoreDataObject *currentMessageCoreDataObject = (XMPPMessageArchiving_Message_CoreDataObject*)messageObject;
 			XMPPMessage *message = currentMessageCoreDataObject.message;
@@ -269,9 +403,5 @@ static const int ddLogLevel = DDLogLevelInfo;
 	return messages;
 }
 
-- (NSManagedObjectContext *)managedObjectContext_roster
-{
-	return [_xmppRosterStorage mainThreadManagedObjectContext];
-}
 
 @end

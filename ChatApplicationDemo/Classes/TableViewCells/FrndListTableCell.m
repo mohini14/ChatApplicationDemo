@@ -25,7 +25,6 @@
 -(void) setUPCell:(Person *)personDetails
 {
 	self.frndnameLabel.text = personDetails.name;
-	self.frndStatusLabel.text = personDetails.status;
 }
 
 @end

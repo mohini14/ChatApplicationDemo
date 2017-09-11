@@ -14,12 +14,14 @@
 #define  kFrndListTableCellIdentifier        @""
 #define  kSelfMessageTabelCellIdentifier     @"SelfMessageTableCell"
 #define  kRecievedMessageTableCellIdentifier @"RecievedMessageCell"
+#define kHeaderViewIdentifierName @"HeaderView"
 
 
 //XIB Names
 #define kFrndListNIBName		@"FrndListcell"
 #define kRecievedMessageNIBName @"RecievedMessageCell"
 #define kSelfmessageNIBName		@"SelfMessageTableCell"
+#define kHeaderViewNIBName      @"HeaderView"
 
 //Constant Colors
 #define kAppMainColor [UIColor colorWithRed:14.0/255.0 green:77.0/255.0 blue:67.0/255.0 alpha:1.0]

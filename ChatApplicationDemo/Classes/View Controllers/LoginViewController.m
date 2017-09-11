@@ -62,7 +62,7 @@
 	{
 		_usernameTextField.text = userId;
 		_passwordTextField.text = password;
-		[self loginButtonPressed:nil];
+//		[self loginButtonPressed:nil];
 	}
 }
 

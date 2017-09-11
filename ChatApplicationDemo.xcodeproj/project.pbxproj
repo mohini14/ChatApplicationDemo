@@ -9,7 +9,8 @@
 /* Begin PBXBuildFile section */
 		1502A7E41F5EA4D400CD4BD7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1502A7E31F5EA4D400CD4BD7 /* Localizable.strings */; };
 		1502A7E81F5EB27A00CD4BD7 /* ChatManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1502A7E71F5EB27A00CD4BD7 /* ChatManager.m */; };
-		151F92431F629F9E0042D6BB /* Empty.xib in Resources */ = {isa = PBXBuildFile; fileRef = 151F92421F629F9E0042D6BB /* Empty.xib */; };
+		151F92431F629F9E0042D6BB /* HeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 151F92421F629F9E0042D6BB /* HeaderView.xib */; };
+		153B19791F66734F003AF22B /* HeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 153B19781F66734F003AF22B /* HeaderView.m */; };
 		155556341F57E5F80088CC7B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 155556261F57E5F80088CC7B /* AppDelegate.m */; };
 		155556361F57E5F80088CC7B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1555562E1F57E5F80088CC7B /* Assets.xcassets */; };
 		155556371F57E5F80088CC7B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 155556301F57E5F80088CC7B /* LaunchScreen.storyboard */; };
@@ -51,7 +52,9 @@
 		1502A7E31F5EA4D400CD4BD7 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		1502A7E61F5EB27A00CD4BD7 /* ChatManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatManager.h; sourceTree = "<group>"; };
 		1502A7E71F5EB27A00CD4BD7 /* ChatManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatManager.m; sourceTree = "<group>"; };
-		151F92421F629F9E0042D6BB /* Empty.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Empty.xib; sourceTree = "<group>"; };
+		151F92421F629F9E0042D6BB /* HeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HeaderView.xib; sourceTree = "<group>"; };
+		153B19771F66734F003AF22B /* HeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeaderView.h; sourceTree = "<group>"; };
+		153B19781F66734F003AF22B /* HeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeaderView.m; sourceTree = "<group>"; };
 		155556091F57E5520088CC7B /* ChatApplicationDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChatApplicationDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1555561D1F57E5520088CC7B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		155556251F57E5F80088CC7B /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -265,6 +268,8 @@
 				15A31C321F5D495400A190B7 /* RecievedMessageCell.m */,
 				15A31C341F5D497300A190B7 /* SelfMessageTableCell.h */,
 				15A31C351F5D497300A190B7 /* SelfMessageTableCell.m */,
+				153B19771F66734F003AF22B /* HeaderView.h */,
+				153B19781F66734F003AF22B /* HeaderView.m */,
 			);
 			path = TableViewCells;
 			sourceTree = "<group>";
@@ -275,7 +280,7 @@
 				15A31B801F5D277900A190B7 /* FrndListcell.xib */,
 				15A31C2D1F5D491200A190B7 /* RecievedMessageCell.xib */,
 				15A31C2F1F5D492C00A190B7 /* SelfMessageTableCell.xib */,
-				151F92421F629F9E0042D6BB /* Empty.xib */,
+				151F92421F629F9E0042D6BB /* HeaderView.xib */,
 			);
 			path = XIB;
 			sourceTree = "<group>";
@@ -1543,7 +1548,7 @@
 				155556381F57E5F80088CC7B /* Main.storyboard in Resources */,
 				155556361F57E5F80088CC7B /* Assets.xcassets in Resources */,
 				155556371F57E5F80088CC7B /* LaunchScreen.storyboard in Resources */,
-				151F92431F629F9E0042D6BB /* Empty.xib in Resources */,
+				151F92431F629F9E0042D6BB /* HeaderView.xib in Resources */,
 				1502A7E41F5EA4D400CD4BD7 /* Localizable.strings in Resources */,
 				15A31C2E1F5D491200A190B7 /* RecievedMessageCell.xib in Resources */,
 				15FA78941F613A58000844A8 /* BackgroundImage.jpg in Resources */,
@@ -1630,6 +1635,7 @@
 				15A31C331F5D495400A190B7 /* RecievedMessageCell.m in Sources */,
 				15A31B771F5D238C00A190B7 /* FrndListTableCell.m in Sources */,
 				15A31B8A1F5D30BA00A190B7 /* DataSession.m in Sources */,
+				153B19791F66734F003AF22B /* HeaderView.m in Sources */,
 				15A31C2C1F5D465B00A190B7 /* Message.m in Sources */,
 				155556341F57E5F80088CC7B /* AppDelegate.m in Sources */,
 				15A31C291F5D325F00A190B7 /* NSDictionary+ChatApplicationDemo.m in Sources */,

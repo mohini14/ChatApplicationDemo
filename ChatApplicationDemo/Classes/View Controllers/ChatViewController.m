@@ -62,7 +62,7 @@
 			[message addAttributeWithName:@"to" stringValue:self.buddy.name];
 			[message addChild:body];
 			
-			[_chatManager.xmppStream sendElement:message];
+//			[_chatManager.xmppStream sendElement:message];
 		
 		[self AddNewMessageToArray:messageContent];
 	}

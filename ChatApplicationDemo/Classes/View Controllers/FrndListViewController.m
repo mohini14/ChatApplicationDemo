@@ -9,14 +9,14 @@
 #import "FrndListViewController.h"
 #import "LoginViewController.h"
 #import "ChatViewController.h"
+#import "HeaderView.h"
+#import "XMPP.h"
 
 @interface FrndListViewController ()
 {
 	IBOutlet UITableView* _frndListTableView;
 	
-	NSMutableArray<Person* >* _frndListArray;
 	ChatManager* _chatManger;
-	id<ChatDelegate > _chatDelegate;
 	
 	NSFetchedResultsController* _fetchedResultsControllerObj;
 }
@@ -31,8 +31,6 @@
 	
 	_chatManger = kChatManagerSingletonObj;
 	
-//	[_chatManger setUpStream];
-//	_chatDelegate = self;
 	[self initialVCSetup];
 }
 
@@ -50,14 +48,63 @@
 #pragma mark- Initial VC setup
 -(void) initialVCSetup
 {
-	_frndListArray = [[NSMutableArray alloc]init];
+	_fetchedResultsControllerObj = [_chatManger fetchFetchResultsControllerObj];
+	_fetchedResultsControllerObj.delegate = self;
+	
+	//register header NIB
+	[_frndListTableView registerNib:[UINib nibWithNibName:kHeaderViewNIBName bundle:[NSBundle mainBundle]] forHeaderFooterViewReuseIdentifier:kHeaderViewIdentifierName];
 }
 
 #pragma MARK- Table view Data source
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+	return _fetchedResultsControllerObj.sections.count;
+
+}
+
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return _frndListArray.count;
+	NSArray* fetchedResultsSection = [_fetchedResultsControllerObj sections];
+	
+	if(fetchedResultsSection.count > section)
+	{
+		id<NSFetchedResultsSectionInfo> rows = fetchedResultsSection[section];
+		return rows.numberOfObjects;
+	}
+	
+	return kConstIntZero;
 }
+
+
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+	NSArray* fetchedResultsSection = [_fetchedResultsControllerObj sections];
+	HeaderView* headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderViewIdentifierName];
+	
+	NSString* availabilityInfo = kEmptyFieldNotation;
+	
+	if(fetchedResultsSection.count > section)
+	{
+		id<NSFetchedResultsSectionInfo> rows = fetchedResultsSection[section];
+		int sectionValue = [rows.name intValue];
+		
+		switch (sectionValue)
+		{
+			case 0:
+				availabilityInfo = @"Available";
+				break;
+				
+			case 1:
+				availabilityInfo = @"Away";
+				break;
+				
+			default:
+				availabilityInfo = @"Offline";
+		}
+	}
+	return  [headerView setHeaderTitleForTableSection:availabilityInfo];
+}
+
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -67,7 +114,13 @@
 	if(cell == nil)
 		cell = [[[NSBundle mainBundle]loadNibNamed:kFrndListNIBName owner:nil options:nil] firstObject];
 
-	[cell setUPCell:_frndListArray[indexPath.row]];
+	XMPPUserCoreDataStorageObject* user = [_fetchedResultsControllerObj objectAtIndexPath:indexPath];
+	
+	Person* person = [[Person alloc] init];
+	
+	person.name = user.displayName;
+	
+	[cell setUPCell:person];
 	
 	return cell;
 }
@@ -77,62 +130,35 @@
 	[self performSegueWithIdentifier:kFrndListToChatSegue sender:indexPath];
 }
 
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+	return 20;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	return 100;
+}
 #pragma mark- Actions on VC
-//-(IBAction)showLogin:(id)sender
-//{
-//	LoginViewController* loginVC = [[LoginViewController alloc]init];
-//	[self presentViewController:loginVC animated:YES completion:nil];
-//}
 
-//#pragma mark- Private methods
-//-(void) checkLoging
-//{
-//	NSString* userId = [[NSUserDefaults standardUserDefaults] objectForKey: kUserIdKey];
-//	
-//	if(!userId)
-//		[self showLogin:nil];
-//	else if ([_chatManger connect])
-//	{
-//		NSLog(@"Show buddy list");
-//		[_chatDelegate newBuddyOnline:userId];
-//	}
-//}
-
-//#pragma mark- Chat Delegate Delegates
-//- (void)newBuddyOnline:(NSString *)buddyName
-//{
-//	Person* person = [[Person alloc]init];
-//	person.name = buddyName;
-//	[_frndListArray addObject:person];
-//	[_frndListTableView reloadData];
-//}
-//
-//- (void)buddyWentOffline:(NSString *)buddyName
-//{
-//	Person* person = [[Person alloc]init];
-//	person.name = buddyName;
-//
-//	[_frndListArray removeObject:person];
-////	[_frndListTableView reloadData];
-//}
 #pragma mark- XMPP related methods
 
 #pragma mark- NSFetchedResultsController Delegate
 -(void)controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
-	
+	[_frndListTableView reloadData];
 }
 
 
-#pragma mark- Navigation Methods
--(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-	NSIndexPath* indexPath = (NSIndexPath* )sender;
-	
-	if([segue.identifier isEqualToString:kFrndListToChatSegue])
-	{
-		ChatViewController* destVC = [segue destinationViewController];
-		destVC.buddy = _frndListArray[indexPath.row];
-	}
-}
+//#pragma mark- Navigation Methods
+//-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+//{
+//	NSIndexPath* indexPath = (NSIndexPath* )sender;
+//	
+//	if([segue.identifier isEqualToString:kFrndListToChatSegue])
+//	{
+//		ChatViewController* destVC = [segue destinationViewController];
+//		destVC.buddy = _frndListArray[indexPath.row];
+//	}
+//}
 @end
