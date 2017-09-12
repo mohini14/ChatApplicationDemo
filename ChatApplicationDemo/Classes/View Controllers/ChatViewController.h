@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "MessageDelegate.h"
+#import "JSMessagesViewController.h"
 
-@interface ChatViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, MessageDelegate>
+@interface ChatViewController : JSMessagesViewController<UITableViewDelegate, UITableViewDataSource>
 
 @property (strong,nonatomic) Person* buddy;
 

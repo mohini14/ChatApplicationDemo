@@ -11,9 +11,10 @@
 @interface Message : NSObject
 
 @property (strong, nonatomic) NSString* messageData;
-@property (strong, nonatomic) NSString* messadgeDate;
+@property (strong, nonatomic) NSDate* messadgeDate;
 @property (strong, nonatomic) NSString* messageType;
+@property (strong, nonatomic) NSString* Image;
 
--(instancetype) initWithMessage: (NSDictionary* )messageData;
+//-(instancetype) initWithMessage: (NSString* )messageData withDate: (NSString* )date forMediaTyoe:(NSString* )mediaType withImage:(NSString* )image;
 
 @end

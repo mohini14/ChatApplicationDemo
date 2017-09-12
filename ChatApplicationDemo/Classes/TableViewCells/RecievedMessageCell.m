@@ -21,4 +21,10 @@
     // Configure the view for the selected state
 }
 
+-(void) setUpcellAttributes:(Person *)messageData
+{
+	self.messageTextLabel.text = messageData.message.messageData;
+	self.messageTimeLabel.text = [messageData.message.messadgeDate xmppDateString];
+	self.messageSenderNameLabel.text = messageData.name;
+}
 @end

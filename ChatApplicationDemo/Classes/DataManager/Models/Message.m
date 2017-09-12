@@ -12,17 +12,5 @@
 
 @implementation Message
 
--(instancetype) initWithMessage: (NSDictionary* )messageData
-{
-	self = [super init];
-	
-	if(self)
-	{
-		self.messadgeDate = [messageData stringForKey:kMessagedateKey];
-		self.messageData  = [messageData stringForKey:kMessagedataKey];
-		self.messageType  = [messageData stringForKey:kMessageTypeKey];
-	}
-	return self;
-}
 
 @end

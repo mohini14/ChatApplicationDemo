@@ -25,11 +25,12 @@
 	return sInstance;
 }
 
--(void) saveLoginCredentials:(Person* )PersonData
+-(void) saveLoginCredentials:(Person* )personData
 {
-	[[NSUserDefaults standardUserDefaults] setObject:PersonData.loginId forKey:kUserIdKey];
-	[[NSUserDefaults standardUserDefaults] setObject:PersonData.password forKey:kUserpasswordKey];
-	[[NSUserDefaults standardUserDefaults] setObject:PersonData.name forKey:kUserNameKey];
+	[[NSUserDefaults standardUserDefaults] setObject:personData.xmppId forKey:kUserIdKey];
+	[[NSUserDefaults standardUserDefaults] setObject:personData.userId forKey:kUserIdKey];
+	[[NSUserDefaults standardUserDefaults] setObject:personData.password forKey:kUserpasswordKey];
+	[[NSUserDefaults standardUserDefaults] setObject:personData.name forKey:kUserNameKey];
 	[[NSUserDefaults standardUserDefaults] synchronize];
 }
 

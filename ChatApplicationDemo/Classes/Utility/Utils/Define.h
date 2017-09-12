@@ -34,6 +34,8 @@
 #define kMessagedateKey  @"messageDate"
 #define kMessageTypeKey  @"messageType"
 #define kMessageKey      @"message"
+#define kMediaTypeKey    @"mediaType"
+#define kImageKey		 @"imageKey"
 
 //const strings
 #define kMessageRecievedType @"recievedMessage"
