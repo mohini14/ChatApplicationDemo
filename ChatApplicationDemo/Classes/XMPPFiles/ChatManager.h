@@ -12,7 +12,8 @@
 @interface ChatManager : NSObject<XMPPStreamDelegate, XMPPRosterDelegate>
 
 @property (strong, nonatomic) void (^recievedMessage)(Person* );
-@property (strong, nonatomic) void (^recievePresence)(NSString*, NSString*  );
+@property (strong, nonatomic) void (^recievePresence)(NSString*, NSString* );
+@property (strong, nonatomic) void (^recieveRegistrationMessage)(NSString* error);
 
 -(BOOL) connect;
 -(void) disconnect;
@@ -21,12 +22,12 @@
 -(void) setUpStream;
 
 @property (strong, nonatomic) NSString* userPresence;
-@property (strong, nonatomic) XMPPStream* _xmppStream;
 
 +(instancetype) sharedInstance;
 -(NSFetchedResultsController* ) fetchFetchResultsControllerObj;
 - (NSArray*) fetchMessage:(NSString*)userId;
 - (void)sendElement:(NSXMLElement *)element;
+-(void) registerWithElements : (NSArray* )elements andUserName:(NSString* )username andPassword:(NSString* )password;
 
 #define kChatManagerSingletonObj [ChatManager sharedInstance]
 

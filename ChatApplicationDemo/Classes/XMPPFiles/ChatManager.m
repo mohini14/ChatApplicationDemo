@@ -21,6 +21,8 @@ static const int ddLogLevel = DDLogLevelInfo;
 {
     BOOL _isConnectionOpen;
 	BOOL _customerCartEvaluation;
+	BOOL _isRegistered;
+	XMPPStream* _xmppStream;
 	
 	NSString* _userId;
 	NSString* _password;
@@ -65,7 +67,7 @@ static const int ddLogLevel = DDLogLevelInfo;
 // method creates the channel to manage the exchange of messages.
 -(void) setUpStream
 {
-	self._xmppStream = [[XMPPStream alloc]init];
+	_xmppStream = [[XMPPStream alloc]init];
 	
 #if !TARGET_IPHONE_SIMULATOR
 	{
@@ -113,20 +115,20 @@ static const int ddLogLevel = DDLogLevelInfo;
 	
 	// Activate all the modules
 	_customerCartEvaluation = YES;
-	[_xmppReconnect activate:self._xmppStream];
-	[_xmppRoster activate:self._xmppStream];
-	[_xmppVCardTempModule activate:self._xmppStream];
-	[_xmppvCardAvatarModule activate:self._xmppStream];
-	[_xmppCapabilities activate:self._xmppStream];
-	[_xmppMessageArchiving activate:self._xmppStream];
+	[_xmppReconnect activate:_xmppStream];
+	[_xmppRoster activate:_xmppStream];
+	[_xmppVCardTempModule activate:_xmppStream];
+	[_xmppvCardAvatarModule activate:_xmppStream];
+	[_xmppCapabilities activate:_xmppStream];
+	[_xmppMessageArchiving activate:_xmppStream];
 	
 	// adding delegates to module as this class
-	[self._xmppStream addDelegate:self delegateQueue:dispatch_get_main_queue()];
+	[_xmppStream addDelegate:self delegateQueue:dispatch_get_main_queue()];
 	[_xmppRoster addDelegate:self delegateQueue:dispatch_get_main_queue()];
 	[_xmppMessageArchiving addDelegate:self delegateQueue:dispatch_get_main_queue()];
 	
-	[self._xmppStream setHostName:@"192.168.11.117"];
-	[self._xmppStream setHostPort:5222];
+	[_xmppStream setHostName:@"192.168.11.117"];
+	[_xmppStream setHostPort:5222];
 
 }
 
@@ -134,18 +136,18 @@ static const int ddLogLevel = DDLogLevelInfo;
 -(void) goOnline
 {
 	XMPPPresence* userPresence = [XMPPPresence presence];
-	[self._xmppStream sendElement:userPresence];
+	[_xmppStream sendElement:userPresence];
 }
 
 - (void)goOffline
 {
 	XMPPPresence *presence = [XMPPPresence presenceWithType:@"unavailable"];
-	[self._xmppStream sendElement:presence];
+	[_xmppStream sendElement:presence];
 }
 
 - (void)sendElement:(NSXMLElement *)element
 {
-	[self._xmppStream sendElement:element];
+	[_xmppStream sendElement:element];
 }
 #pragma mark- Core Data Methods
 
@@ -164,7 +166,7 @@ static const int ddLogLevel = DDLogLevelInfo;
 - (void)xmppRoster:(XMPPRoster *)sender didReceiveBuddyRequest:(XMPPPresence *)presence
 {
 	DDLogVerbose(@"%@: %@", THIS_FILE, THIS_METHOD);
-	XMPPUserCoreDataStorageObject* userData = [_xmppRosterCoreDataStorage userForJID:[presence from] xmppStream:self._xmppStream managedObjectContext:[self managedObjectContext_roster]];
+	XMPPUserCoreDataStorageObject* userData = [_xmppRosterCoreDataStorage userForJID:[presence from] xmppStream:_xmppStream managedObjectContext:[self managedObjectContext_roster]];
 	
 	NSString* userName = [userData displayName];
 	NSString* jidStrBare = [presence fromStr];
@@ -195,7 +197,7 @@ static const int ddLogLevel = DDLogLevelInfo;
 {
 	XMPPUserCoreDataStorageObject *user = [_xmppRosterCoreDataStorage
 										   userForJID:[presence from]
-										   xmppStream:self._xmppStream
+										   xmppStream:_xmppStream
 										   managedObjectContext:[self managedObjectContext_roster]];
 	
 	DDLogVerbose(@"didReceivePresenceSubscriptionRequest from user %@ ",
@@ -231,7 +233,7 @@ static const int ddLogLevel = DDLogLevelInfo;
 	_userId = [[NSUserDefaults standardUserDefaults] stringForKey:kUserIdKey];
 	_password = [[NSUserDefaults standardUserDefaults] stringForKey:kUserpasswordKey];
 	
-	if(![self._xmppStream isDisconnected])
+	if(![_xmppStream isDisconnected])
 		return YES;
 	
 	if(_userId == nil || _password == nil)
@@ -241,10 +243,10 @@ static const int ddLogLevel = DDLogLevelInfo;
 		return NO;
 	
 	//set JID
-	[self._xmppStream setMyJID:[XMPPJID jidWithString:_userId]];
+	[_xmppStream setMyJID:[XMPPJID jidWithString:_userId]];
 	
 	NSError* error = nil;
-	if(![self._xmppStream connectWithTimeout:30 error:&error])
+	if(![_xmppStream connectWithTimeout:30 error:&error])
 	{
 		[Utility promptMessageOnScreen:error.localizedDescription sender:nil];
 		return NO;
@@ -258,39 +260,41 @@ static const int ddLogLevel = DDLogLevelInfo;
 -(void) disconnect
 {
 	[self goOffline];
-	[self._xmppStream disconnect];
+	[_xmppStream disconnect];
 }
 
 #pragma mark- XMPP Delegate methods
 - (void)xmppStream:(XMPPStream *)sender didNotAuthenticate:(NSXMLElement *)error
 {
+	NSLog(@"did not authenticate\n");
 	DDLogVerbose(@"%@: %@", THIS_FILE, THIS_METHOD);
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:kcheckLoggingInNotification
 														object:[NSNumber numberWithBool:NO]];
 }
 
-- (void)xmppStream:(XMPPStream *)sender didNotRegister:(NSXMLElement *)error
-{
-	NSLog(@"call....");
-}
+
 -(void)xmppStreamDidConnect:(XMPPStream *)sender
 {
+	NSLog(@"Did connect method\n");
     _isConnectionOpen = YES;
     NSError* error = nil;
-    
+	
     if(_password)
-        [self._xmppStream authenticateWithPassword:_password error:&error ];
-	else
-		DDLogError(@"Authentication failed: %@", error);
+		[_xmppStream authenticateWithPassword:_password error:&error];
 }
 
 -(void)xmppStreamDidAuthenticate:(XMPPStream *)sender
 {
+	NSLog(@"Did authenticate method\n");
 	DDLogVerbose(@"%@: %@", THIS_FILE, THIS_METHOD);
 
     [self goOnline];
 	
+//	if(_isRegistered)
+//	{
+//		[self registerWithPassword:_password];
+//	}
 	// on successfull authentication
 	[[NSNotificationCenter defaultCenter] postNotificationName:kcheckLoggingInNotification
 														object:[NSNumber numberWithBool:YES]];
@@ -298,6 +302,7 @@ static const int ddLogLevel = DDLogLevelInfo;
 
 - (void) xmppStream:(XMPPStream*)sender socketDidConnect:(GCDAsyncSocket*)socket
 {
+	NSLog(@"socket did connect method\n");
 	DDLogVerbose(@"%@: %@", THIS_FILE, THIS_METHOD);
 }
 
@@ -306,7 +311,7 @@ static const int ddLogLevel = DDLogLevelInfo;
 {
 	DDLogVerbose(@"%@: %@", THIS_FILE, THIS_METHOD);
 	
-	NSString *expectedCertName = [self._xmppStream.myJID domain];
+	NSString *expectedCertName = [_xmppStream.myJID domain];
 	if (expectedCertName)
 	{
 		settings[(NSString *) kCFStreamSSLPeerName] = expectedCertName;
@@ -421,5 +426,65 @@ static const int ddLogLevel = DDLogLevelInfo;
 	return messages;
 }
 
+#pragma mark- Resgistration Related method
+-(void) registerWithElements : (NSArray* )elements andUserName:(NSString* )username andPassword:(NSString* )password
+{
+
+	XMPPJID* jid  = [XMPPJID jidWithString:[NSString stringWithFormat:@"%@@%@",username, @"mindfire.com"]];
+	[_xmppStream  setMyJID: jid];
+//	NSLog(@"------Attempting registration for username %@ -------",_xmppStream.myJID.bare);
+
+	_password = password;
+//	_isRegistered = YES;
+	NSError* error;
+
+	if(![ _xmppStream isConnected])
+	{
+		[_xmppStream connectWithTimeout:XMPPStreamTimeoutNone error:&error];
+	}
+	else
+		 [self registerWithPassword:_password];
+
+	
+	if(error)
+	{
+		NSLog(@"%@", error.localizedDescription);
+	}
+//	[self._xmppStream connectWithTimeout:XMPPStreamTimeoutNone error:&error];
+}
+
+-(BOOL) supportsInBandRegistration
+{
+	return _xmppStream.supportsInBandRegistration;
+}
+
+-(void) registerWithPassword: (NSString* )password
+{
+	 [_xmppStream registerWithPassword:password error:nil];
+}
+
+- (void)xmppStream:(XMPPStream *)sender didNotRegister:(NSXMLElement *)error
+{
+	DDXMLElement *errorXML = [error elementForName:@"error"];
+	NSString *errorCode  = [[errorXML attributeForName:@"code"] stringValue];
+	
+	NSString *regError = [NSString stringWithFormat:@"ERROR :- %@",error.description];
+	
+	
+	
+	if([errorCode isEqualToString:@"409"])
+		
+		regError =  @"Username Already Exists!";
+	
+	if(self.recieveRegistrationMessage)
+		self.recieveRegistrationMessage(regError);
+}
+
+-(void)xmppStreamDidRegister:(XMPPStream *)sender
+{
+	if(self.recieveRegistrationMessage)
+		self.recieveRegistrationMessage(nil);
+	
+}
 
 @end

@@ -23,16 +23,16 @@
 	
 }
 
-- (NSString *) substituteEmoticons {
-	
-	//See http://www.easyapns.com/iphone-emoji-alerts for a list of emoticons available
-	
-	NSString *res = [self stringByReplacingOccurrencesOfString:@":)" withString:@"\ue415"];
-	res = [res stringByReplacingOccurrencesOfString:@":(" withString:@"\ue403"];
-	res = [res stringByReplacingOccurrencesOfString:@";-)" withString:@"\ue405"];
-	res = [res stringByReplacingOccurrencesOfString:@":-x" withString:@"\ue418"];
-	
-	return res;
-	
-}
+
+
+//	//See http://www.easyapns.com/iphone-emoji-alerts for a list of emoticons available
+//	
+//	NSString *res = [self stringByReplacingOccurrencesOfString:@":)" withString:@"\ue415"];
+//	res = [res stringByReplacingOccurrencesOfString:@":(" withString:@"\ue403"];
+//	res = [res stringByReplacingOccurrencesOfString:@";-)" withString:@"\ue405"];
+//	res = [res stringByReplacingOccurrencesOfString:@":-x" withString:@"\ue418"];
+//	
+//	return res;
+
+//}
 @end
