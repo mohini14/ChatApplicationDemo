@@ -76,8 +76,8 @@
 	// case: fileds are not empty
 	else
 	{
-		NSDictionary* personDetailsDict = @{ kUserIdKey :_usernameTextField.text,
-											 kUserpasswordKey:_passwordTextField.text
+		NSDictionary* personDetailsDict = @{kUserIdKey :_usernameTextField.text,
+											kUserpasswordKey :_passwordTextField.text
 											};
 		NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
 		[userDefaults setObject:personDetailsDict[kUserIdKey] forKey:kUserIdKey];

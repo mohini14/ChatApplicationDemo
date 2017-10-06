@@ -10,7 +10,7 @@
 #import "MessageDelegate.h"
 #import "JSMessagesViewController.h"
 
-@interface ChatViewController : JSMessagesViewController<UITableViewDelegate, UITableViewDataSource>
+@interface ChatViewController : JSMessagesViewController<JSMessagesViewDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @property (strong,nonatomic) Person* buddy;
 

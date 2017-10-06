@@ -14,12 +14,12 @@
 
 @interface ChatViewController ()
 {
-	 IBOutlet UITableView* _chatTableView;
-	 IBOutlet UITextView* _messageTextview;
-	
-	id<MessageDelegate > _messageDelegate;
+//	 IBOutlet UITableView* _chatTableView;
+//	 IBOutlet UITextView* _messageTextview;
+//	
+//	id<MessageDelegate > _messageDelegate;
 	ChatManager* _chatManager;
-	
+//
 	NSMutableArray<Person* >* _messageListArray;
 }
 
@@ -27,66 +27,21 @@
 
 @implementation ChatViewController
 
-
-#pragma mark- View life cycle methods
-- (void)viewDidLoad
+-(void) viewDidLoad
 {
 	[super viewDidLoad];
-	_messageListArray = [[NSMutableArray alloc]init];
-//	_messageDelegate = self;
-	_chatManager = kChatManagerSingletonObj;
-//
-	_chatTableView.delegate = self;
-	_chatTableView.dataSource = self;
-	self.delegate = self;
-//
-//	[_chatManager setUpStream];
-	
-	NSArray* list = [kChatManagerSingletonObj fetchMessage:[self.buddy.xmppId bare]];
-	for (XMPPMessage* message in list)
-		[self setMessage:message];
-	
-
-	_chatManager.recievedMessage = ^(Person* person)
-	{
-		[_messageListArray addObject:person];
-		[_chatTableView reloadData];
-	};
+	[self initialViewSettings];
 }
 
-- (void)didReceiveMemoryWarning
+#pragma mark- Initial View setup
+-(void) initialViewSettings
 {
-    [super didReceiveMemoryWarning];
+	self.delegate = self;
+	_chatManager = kChatManagerSingletonObj;
 }
-
-
 
 #pragma mark- Actions on VC
--(void)sendPressed:(UIButton *)sender withText:(NSString *)text
-{
-	NSString* messageContent = text;
-	
-	if(messageContent.length > kConstIntZero)
-	{
-		[JSMessageSoundEffect playMessageSentSound];
 
-			NSXMLElement *body = [NSXMLElement elementWithName:@"body"];
-			[body setStringValue:messageContent];
-			
-			NSXMLElement *message = [NSXMLElement elementWithName:kMessageKey];
-			[message addAttributeWithName:@"type" stringValue:@"chat"];
-			[message addAttributeWithName:@"to" stringValue:self.buddy.name];
-			[message addChild:body];
-		
-		Person* person = [[Person alloc] initWithMessage:messageContent withDate:[NSDate date] forMediaTyoe:JSBubbleMediaTypeText withImage:nil withMessageType:[ NSString stringWithFormat:@"%@%@",kEmptyFieldNotation, [NSNumber numberWithInt:JSBubbleMessageTypeOutgoing]]];
-		person.xmppId = nil;
-	
-		_messageTextview.text = kEmptyFieldNotation;
-		[_messageListArray addObject:person];
-		[_chatTableView reloadData];
-//		[self AddNewMessageToArray:messageContent];
-	}
-}
 - (void) setMessage:(XMPPMessage*)message
 {
 	NSString* messageUser = [[message from] user];
@@ -100,15 +55,12 @@
 	
 	int messageType = (messageUser == nil) ? JSBubbleMessageTypeOutgoing : JSBubbleMessageTypeIncoming;
 	
+	Person* person = [[Person alloc] init];
+	[person initWithMessage:message.body withDate:date forMediaTyoe:JSBubbleMediaTypeText withImage:nil withMessageType:[NSString stringWithFormat:@"%@%@",kEmptyFieldNotation,[NSNumber numberWithInt:messageType]]];
 	
-	Person* person = [[Person alloc] initWithMessage:message.body withDate:date forMediaTyoe:[NSString stringWithFormat:@"%@%@",kEmptyFieldNotation,[NSNumber numberWithInteger:JSBubbleMediaTypeText]] withImage:@"" withMessageType:[NSString stringWithFormat:@"%@%@", kEmptyFieldNotation,[NSNumber numberWithInt:messageType]]];
-	person.xmppId = self.buddy.name;
 	
 	[_messageListArray addObject:person];
-	
-	[kChatManagerSingletonObj sendElement:message];
-
-	[_chatTableView reloadData];
+	[self.tableView reloadData];
 }
 
 -(NSDate *) delayTimeToNSDate:(NSString *)time_str
@@ -123,113 +75,57 @@
 	return date_8zone;
 }
 
-//-(IBAction)closeChatButtonPressed:(UIButton *)sender
-//{
-//	[self dismissViewControllerAnimated:YES completion:nil];
-//}
-//
-//#pragma mark- Table view Data source
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+#pragma mark - Table view data source
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 	return _messageListArray.count;
 }
 
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+#pragma mark- Message view delegates
+-(void)sendPressed:(UIButton *)sender withText:(NSString *)text
 {
-	// case message is sent by other person
-//	if([_messageListArray[indexPath.row].message.messageType isEqualToString:kMessageRecievedType])
-		return [self createRecievedMessageCell:indexPath forTableView:tableView];
+	if([text length] == 0)
+		return;
 	
-	//case : own message needs to be dispalyed
-//	return [self createSelfMessageTableView:indexPath forTableView:tableView];
-
+	[JSMessageSoundEffect playMessageSentSound];
+	
+	NSXMLElement *body = [NSXMLElement elementWithName:@"body"];
+	[body setStringValue:text];
+	
+	NSXMLElement *message = [NSXMLElement elementWithName:@"message"];
+	[message addAttributeWithName:@"type" stringValue:@"chat"];
+	[message addAttributeWithName:@"to" stringValue:self.buddy.userId];
+	[message addChild:body];
+	
+	Person *obj = [[Person alloc] initWithMessage:text withDate:[NSDate date] forMediaTyoe:JSBubbleMediaTypeText withImage:nil withMessageType:[NSString stringWithFormat:@"%ld",(long)JSBubbleMessageTypeOutgoing]];
+	
+	[_chatManager sendElement:message];
+	[_messageListArray addObject:obj];
+	
+	[self finishSend:NO];
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+- (JSBubbleMessageType)messageTypeForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	return 200;
-}
-//
-//#pragma mark- Private method
-//
-// display the message of other peerson
--(RecievedMessageCell* ) createRecievedMessageCell:(NSIndexPath* )indexPath forTableView:(UITableView* )tableView
-{
-	RecievedMessageCell* cell = [tableView dequeueReusableCellWithIdentifier:kRecievedMessageTableCellIdentifier];
+	return [NSString stringWithFormat: @"%@%@",kEmptyFieldNotation,[[NSNumber numberWithInt: _messageListArray[indexPath.row].message.messageType]]];
 	
-	if(!cell)
-	{
-		cell = [[[NSBundle mainBundle] loadNibNamed:kRecievedMessageNIBName owner:nil options:nil]firstObject];
-	}
-	
-	[cell setUpcellAttributes:_messageListArray[indexPath.row]];
-	cell.userInteractionEnabled = NO;
-	return cell;
 }
 
-//// display self message
-//-(SelfMessageTableCell* ) createSelfMessageTableView:(NSIndexPath* )indexPath forTableView:(UITableView* )tableView
-//{
-//	SelfMessageTableCell* cell = [tableView dequeueReusableCellWithIdentifier:kSelfMessageTabelCellIdentifier];
-//	
-//	if(!cell)
-//	{
-//		cell = [[[NSBundle mainBundle] loadNibNamed:kSelfmessageNIBName owner:nil options:nil]firstObject];
-//	}
-//	
-//	[cell setUpcellAttributes:_messageListArray[indexPath.row]];
-//	cell.userInteractionEnabled = NO;
-//	return cell;
-//}
-//
-// method adds new message sent by self to MessageArrayList
--(void) AddNewMessageToArray :(NSString* )messageContent
+- (JSBubbleMessageStyle)messageStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	_messageTextview.text = kEmptyFieldNotation;
-	Person* person  = [[Person alloc]init];
-	Message* message = [[Message alloc] init];
-	
-	message.messageData = messageContent;
-	message.messadgeDate = [NSDate date];
-	message.messageType = kMessageSelfType;
-	person.message = message;
-	
-	[_messageListArray addObject:person];
-	[_chatTableView reloadData];
+	return JSBubbleMessageStyleFlat;
 }
 
-//#pragma mark- Message Delegate methods
-//-(void)newMessageRecieved:(NSMutableDictionary *)messageContent
-//{
-//	NSString *m = [messageContent objectForKey:@"msg"];
-//	
-//	[messageContent setObject:[m substituteEmoticons] forKey:@"msg"];
-//	[messageContent setObject:[NSString getCurrentTime] forKey:@"time"];
-//	
-//	Person* person = [[Person alloc]init];
-//	
-//	person.message.messageData = m ;
-//	[_messageListArray addObject:person];
-//	[_chatTableView reloadData];
-//	
-//	NSIndexPath *topIndexPath = [NSIndexPath indexPathForRow:_messageListArray.count-1
-//												   inSection:0];
-//	
-//	[_chatTableView scrollToRowAtIndexPath:topIndexPath
-//					  atScrollPosition:UITableViewScrollPositionMiddle
-//							  animated:YES];
-//	
-//}
-//
-
-- (NSString *)textForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (JSBubbleMediaType)messageMediaTypeForRowAtIndexPath:(NSIndexPath *)indexPath{
 	
-	return _messageListArray[indexPath.row].message.messageData;
+	MessageData *message = self.messageArray[indexPath.row];
+	return message.mediaType;
 }
 
-- (NSDate *)timestampForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UIButton *)sendButton
 {
-	 return _messageListArray[indexPath.row].message.messadgeDate;
+	return [UIButton defaultSendButton];
 }
+
 @end
